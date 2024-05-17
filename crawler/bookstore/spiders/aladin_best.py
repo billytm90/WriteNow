@@ -1,34 +1,44 @@
 import scrapy
-
+from datetime import datetime
+import numpy as np
+import pymysql
+import json
 
 class AladinBestSpider(scrapy.Spider):
     name = "aladin_best"
     allowed_domains = ["www.aladin.co.kr"]
 
-    # 링크 연결
-    def __init__(self, cid=None, year=None, month=None, week=None, *args, **kwargs):
+    def __init__(self, cid=None, year=None, *args, **kwargs):
         super(AladinBestSpider, self).__init__(*args, **kwargs)
         self.cid = cid
         self.year = year
-        self.month = month
-        self.week = week
+        self.today = datetime.today()
+
+        # MySQL 연결 설정
+        self.connection = pymysql.connect(
+            host='localhost',
+            port=3306,
+            user='root',
+            password='',
+            db='write_now',
+            charset='utf8mb4',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+    def close(self, reason):
+        self.connection.close()
 
     def start_requests(self):
-        urls = [
-            f'https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&BranchType=1&CID={self.cid}&Year={self.year}&Month={self.month}&Week={self.week}&page={page}&cnt=1000&SortOrder=1'
-            for page in range(1, 21)
-        ]
+        for month in range(12, 0, -1): # month 범위
+            urls = [
+                f'https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=MonthlyBest&BranchType=1&CID={self.cid}&Year={self.year}&Month={month:02d}&page={page}&cnt=100000&SortOrder=5'
+                for page in range(1, 151)
+            ]
 
-        for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse, meta={'year': self.year, 'month': self.month})
+            for url in urls:
+                yield scrapy.Request(url=url, callback=self.parse, cb_kwargs={'year': self.year, 'month': month})
 
-
-    # 데이터 추출
-    def parse(self, response):
-        # meta에서 year와 month 추출
-        year = response.meta['year']
-        month = response.meta['month']
-
+    def parse(self, response, year, month):
         id = response.css('div#newbg_body div.ss_book_box::attr(itemid)').getall()
         publication_date_bef = response.xpath('//div[@class="ss_book_list"][1]/ul/li[last()-2]/text()[last()]').getall()
         publication_date = [date[3:] for date in publication_date_bef]
@@ -39,20 +49,65 @@ class AladinBestSpider(scrapy.Spider):
         list_price = response.css('.ss_book_list:nth-child(1) > ul > li:nth-last-child(2) > span:nth-child(1)::text').getall()
         selling_price = response.css('.ss_book_list:nth-child(1) > ul > li:nth-last-child(2) > span.ss_p2 > b > span::text').getall()
         sales_point = response.css('.ss_book_list:nth-child(1) > ul > li:nth-last-child(1) > b::text').getall()
-        
 
-        # 추출한 데이터를 하나로 묶기
+        year = int(year)
+        month = int(month)
+        
         for id, title, publication_date, author, publisher, list_price, selling_price, sales_point in zip(id, title, publication_date, author, publisher, list_price, selling_price, sales_point):
-            yield {
+            id = int(id)
+            list_price = int(list_price.replace(',', ''))
+            selling_price = int(selling_price.replace(',', ''))
+            sales_point = int(sales_point.replace(',', ''))
+
+            data = {
                 'id': id,
                 'title': title,
                 'category': category,
                 'publication_date': publication_date,
                 'author': author,
                 'publisher': publisher,
-                'list_price' : list_price,
-                'selling_point': selling_price,
+                'list_price': list_price,
+                'selling_price': selling_price,
                 'sales_point': sales_point,
-                'best_year': year,
-                'best_month': month
+                'crawled_at': datetime.today()
             }
+
+            self.save_to_db(data, year, month)
+
+    def save_to_db(self, data, year, month):
+        try:
+            with self.connection.cursor() as cursor:
+                # 데이터가 이미 존재하는지 확인
+                check_sql = "SELECT COUNT(*) FROM raw_books WHERE JSON_EXTRACT(raw_book, '$.id') = %s"
+                cursor.execute(check_sql, (data['id'],))
+                result = cursor.fetchone()
+
+                # datetime 타입을 ISO 형식의 문자열로 변환
+                data['crawled_at'] = data['crawled_at'].isoformat()
+
+                year = int(year)
+                month = int(month)
+
+                if result['COUNT(*)'] > 0: # 데이터가 이미 존재하면 sales_point에 수식 적용
+                    data['sales_point'] = round(data['sales_point'] * np.exp(-0.1 * ((self.today.year - year) * 12 + self.today.month - month)), 2)
+                    
+                    data_json = json.dumps(data, ensure_ascii=False)
+                    
+                    insert_sql = """
+                    INSERT INTO raw_books (raw_book)
+                    VALUES (%s)
+                    """
+                    cursor.execute(insert_sql, (data_json,))
+                else: # 데이터가 존재하지 않으면 원래 데이터 삽입
+                    data_json = json.dumps(data, ensure_ascii=False)
+                    
+                    insert_sql = """
+                    INSERT INTO raw_books (raw_book)
+                    VALUES (%s)
+                    """
+                    cursor.execute(insert_sql, (data_json,))
+
+            self.connection.commit()
+        except Exception as e:
+            self.connection.rollback()
+            self.logger.error(f"Error saving to DB: {e}")
