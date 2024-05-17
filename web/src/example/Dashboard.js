@@ -8,11 +8,12 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
-import Chart from './Chart';
+import Chart from '../Chart';
 import Deposits from './Deposits';
 import RankTable from './Table';
-import ResponsiveAppBar from './ResponsiveAppBar';
+import ResponsiveAppBar from '../ResponsiveAppBar';
 import Button from '@mui/material/Button';
+
 
 function Copyright(props) {
   return (

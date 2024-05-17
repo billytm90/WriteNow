@@ -15,7 +15,7 @@ export default function SearchText() {
       noValidate
       autoComplete="off"
     >
-      <Input placeholder="Placeholder" inputProps={ariaLabel} />
+      <Input placeholder="검색어 추가" inputProps={ariaLabel} />
     </Box>
   );
 }
