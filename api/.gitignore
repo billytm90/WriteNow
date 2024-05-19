@@ -197,3 +197,5 @@ pip-selfcheck.json
 *.sw?
 
 # End of https://www.toptal.com/developers/gitignore/api/venv,python
+/app/ml_model/book_score_model.joblib
+/app/ml_model/book_title_word2vec.model

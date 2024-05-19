@@ -16,7 +16,6 @@ class Books(TypedDict):
 
 
 @router.get('', response_model=list[Books])
-@router.get('/', response_model=list[Books])
 def get_books(conn: PooledMySQLConnection = Depends(get_db_connection)):
     cursor = conn.cursor(buffered=True, dictionary=True)
     cursor.execute("select id, title, author_name, publisher_name, edition from books limit 10")

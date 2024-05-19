@@ -1,5 +1,6 @@
 use write_now;
 
+set collation_connection = 'utf8mb4_general_ci';
 set names utf8mb4;
 
 
@@ -81,44 +82,50 @@ on duplicate key update name=name,
                         store_id=store_id;
 
 
+drop view if exists v_raw_books_with_cap;
+create view v_raw_books_with_cap as
+select jt.id                                                                as store_code,
+       jt.raw_title                                                         as title,
+       json_object('name', jt.raw_author)                                   as author,
+       json_object('name', jt.raw_publisher)                                as publisher,
+       1                                                                    as edition,
+       json_merge_patch(json_object(),
+                        json_object('list_price', jt.raw_list_price),
+                        json_object('selling_price', jt.raw_selling_price)) as pricing,
+       str_to_date(date_format(str_to_date(jt.raw_publication_date, '%Y년 %m월'), '%Y-%m-01'),
+                   '%Y-%m-%d')                                              as published_at,
+       json_merge_patch(json_object(),
+                        json_object('cover_uri', jt.raw_cover_url),
+                        json_object('description', jt.raw_description))     as extra_info,
+       jt.raw_category                                                      as category,
+       jt.raw_sales_point                                                   as scroe,
+       '2024-05-01'                                                         as captured_date
+from raw_books,
+     JSON_TABLE(
+         raw_book, '$' COLUMNS (
+         id VARCHAR(255) PATH '$.id',
+         raw_title VARCHAR(255) collate utf8mb4_general_ci PATH '$.title',
+         raw_author VARCHAR(255) collate utf8mb4_general_ci PATH '$.author',
+         raw_category VARCHAR(255) collate utf8mb4_general_ci PATH '$.category',
+         raw_cover_url VARCHAR(255) collate utf8mb4_general_ci PATH '$.cover_url',
+         raw_publisher VARCHAR(255) collate utf8mb4_general_ci PATH '$.publisher',
+         raw_list_price INT PATH '$.list_price',
+         raw_description TEXT collate utf8mb4_general_ci PATH '$.description',
+         raw_sales_point INT PATH '$.sales_point',
+         raw_selling_price INT PATH '$.selling_price',
+         raw_publication_date VARCHAR(255) collate utf8mb4_general_ci PATH '$.publication_date',
+         raw_captured_date VARCHAR(255) collate utf8mb4_general_ci PATH '$.captured_date'
+         )
+     ) AS jt
+;
+
+
 drop view if exists v_raw_books;
 create view v_raw_books as
-select b.id as book_id, bc.id as category_id, rb.*
-from (select jt.id                                                                as store_code,
-             jt.raw_title                                                         as title,
-             json_object('name', jt.raw_author)                                   as author,
-             json_object('name', jt.raw_publisher)                                as publisher,
-             1                                                                    as edition,
-             json_merge_patch(json_object(),
-                              json_object('list_price', jt.raw_list_price),
-                              json_object('selling_price', jt.raw_selling_price)) as pricing,
-             str_to_date(date_format(str_to_date(jt.raw_publication_date, '%Y년 %m월'), '%Y-%m-01'),
-                         '%Y-%m-%d')                                              as published_at,
-             json_merge_patch(json_object(),
-                              json_object('cover_uri', jt.raw_cover_url),
-                              json_object('description', jt.raw_description))     as extra_info,
-             jt.raw_category                                                      as category,
-             jt.raw_sales_point                                                   as scroe
-      from raw_books,
-           JSON_TABLE(
-                   raw_book, '$' COLUMNS (
-               id VARCHAR(255) PATH '$.id',
-               raw_title VARCHAR(255) PATH '$.title',
-               raw_author VARCHAR(255) PATH '$.author',
-               raw_category VARCHAR(255) PATH '$.category',
-               raw_cover_url VARCHAR(255) PATH '$.cover_url',
-               raw_publisher VARCHAR(255) PATH '$.publisher',
-               raw_list_price INT PATH '$.list_price',
-               raw_description TEXT PATH '$.description',
-               raw_sales_point INT PATH '$.sales_point',
-               raw_selling_price INT PATH '$.selling_price',
-               raw_publication_date VARCHAR(255) PATH '$.publication_date'
-               )
-           ) AS jt) rb
-         join books b on rb.title = b.title and rb.author ->> '$.name' = b.author_name and
-                         rb.publisher ->> '$.name' = b.publisher_name and rb.edition = b.edition
-         join book_categories bc on bc.name = rb.category
-;
+select t1.*, DATE_SUB(t1.captured_date, INTERVAL (t2.rn - 1) MONTH) as cap_date
+from v_raw_books_with_cap t1
+         join (select store_code, row_number() over (partition by store_code) as rn from v_raw_books_with_cap) t2
+              on t1.store_code = t2.store_code;
 
 
 insert into books (title, author, published_at, publisher, edition)
@@ -130,21 +137,32 @@ on duplicate key update title=rb.title,
                         publisher=rb.publisher,
                         edition=rb.edition;
 
+drop view if exists v_raw_books_with_books;
+create view v_raw_books_with_books as
+select b.id as book_id, bc.id as category_id, rb.*
+from v_raw_books rb
+         join books b on rb.title = b.title and rb.author ->> '$.name' = b.author_name and
+                         rb.publisher ->> '$.name' = b.publisher_name and rb.edition = b.edition
+         join book_categories bc on bc.name = rb.category
+;
+
 
 insert into books_in_bookstores (book_id, store_id, store_code, pricing, extra_info)
 select rb.book_id, @aladin_bookstore_id, rb.store_code, rb.pricing, rb.extra_info
-from v_raw_books rb
+from v_raw_books_with_books rb
 on duplicate key update store_code=rb.store_code,
                         pricing=rb.pricing,
                         extra_info=rb.extra_info;
 
 
 insert into book_sales_scores (record_date, book_id, store_id, score)
-select '2024-04-23', rb.book_id, @aladin_bookstore_id, rb.scroe
-from v_raw_books rb
+select rb.cap_date, rb.book_id, @aladin_bookstore_id, rb.scroe
+from v_raw_books_with_books rb
 on duplicate key update score=rb.scroe;
 
 
 insert into book_categories_of_books (book_id, category_id)
-select rb.book_id, rb.category_id from v_raw_books rb
-on duplicate key update book_id=rb.book_id, category_id=rb.category_id;
+select rb.book_id, rb.category_id
+from v_raw_books_with_books rb
+on duplicate key update book_id=rb.book_id,
+                        category_id=rb.category_id;
