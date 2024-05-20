@@ -165,6 +165,34 @@ export default function Search() {
                         </Grid>
                         <Copyright sx={{ pt: 2 }} />
                     </Container>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
+                                    <Typography
+                                        variant="h4"
+                                        noWrap
+                                        component="h4">
+                                        검색한 후의 페이지
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
+                                    <Typography
+                                        variant="h4"
+                                        noWrap
+                                        component="h4">
+                                        검색한 후의 페이지
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
                 </Box>
             </Box>
         </ThemeProvider>
