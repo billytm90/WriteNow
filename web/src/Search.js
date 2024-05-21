@@ -18,13 +18,14 @@ import TextField from '@mui/material/TextField';
 import BasicSelect from './SearchOption';
 import GenreTable from './GenreTable';
 import BookTable from './BookTable';
-import books from './images/books.webp'
+import books from './images/books.jpg'
 import Login from './Login';
+
 
 const defaultTheme = createTheme();
 
 function Copyright(props) {
-    return (
+    return ( 
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
@@ -182,11 +183,29 @@ export default function Search() {
                             </Grid>
                         </Grid>
                     </Container>
-                    <div>
-
-                        <img src={books} alt='Description' sx={{ height: '300px' }} />
-
-                    </div>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <Box sx={{ position:'relative',overflow:'hidden', width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }}>
+                                    <img src={books} alt='Description' style={{ opacity:0.5, width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
+                                    <Typography
+                                        variant="h4"
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            color: 'white',
+                                            padding: '8px',
+                                            borderRadius: '4px',
+                                        }}
+                                    >
+                                        2023년 장르별 베스트셀러
+                                    </Typography>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Container>
                 </Box>
             </Box>
         </ThemeProvider>

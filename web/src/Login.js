@@ -7,17 +7,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
-import Chart from './Chart';
-import Deposits from './example/Deposits';
-import RankTable from './example/Table';
 import Button from '@mui/material/Button';
-import SearchText from './SearchText';
 import TextField from '@mui/material/TextField';
-import BasicSelect from './SearchOption';
-import GenreTable from './GenreTable';
-import BookTable from './BookTable';
-import books from './images/books.webp'
+
+import books from './images/books.jpg'
 
 const defaultTheme = createTheme();
 
