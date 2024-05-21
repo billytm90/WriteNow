@@ -18,6 +18,8 @@ import TextField from '@mui/material/TextField';
 import BasicSelect from './SearchOption';
 import GenreTable from './GenreTable';
 import BookTable from './BookTable';
+import books from './images/books.webp'
+import Login from './Login';
 
 const defaultTheme = createTheme();
 
@@ -57,6 +59,7 @@ export default function Search() {
                     }}
                 >
                     <Toolbar />
+                    <Login />
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
@@ -179,20 +182,11 @@ export default function Search() {
                             </Grid>
                         </Grid>
                     </Container>
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
-                        <Grid container spacing={1}>
-                            <Grid item xs={12}>
-                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
-                                    <Typography
-                                        variant="h4"
-                                        noWrap
-                                        component="h4">
-                                        검색한 후의 페이지
-                                    </Typography>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    </Container>
+                    <div>
+
+                        <img src={books} alt='Description' sx={{ height: '300px' }} />
+
+                    </div>
                 </Box>
             </Box>
         </ThemeProvider>
