@@ -1,3 +1,5 @@
+import pathlib
+
 from gensim.models import Word2Vec
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, VotingRegressor
 from sklearn.linear_model import LinearRegression
@@ -61,8 +63,8 @@ def tune_ensemble_model(X, y, random_state=None, n_iter=10):
 
 
 def get_book_score_model():
-    return joblib_load('./ml_model/book_score_model.joblib')
+    return joblib_load(pathlib.Path(__file__).parent.resolve() / 'ml_model' / 'book_score_model.joblib')
 
 
 def get_book_title_word2vec_model():
-    return Word2Vec.load("./ml_model/book_title_word2vec.model", mmap='r')
+    return Word2Vec.load(str(pathlib.Path(__file__).parent.resolve() / 'ml_model' / 'book_title_word2vec.model'), mmap='r')

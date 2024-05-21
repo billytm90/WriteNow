@@ -6,6 +6,7 @@ db_config = {
     "port": 3306,
     "user": "root",
     "database": "write_now",
+    "password": "wnstlr96!"
 }
 
 pool = pooling.MySQLConnectionPool(

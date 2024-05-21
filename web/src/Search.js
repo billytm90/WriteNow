@@ -10,27 +10,29 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import Chart from './Chart';
-import Deposits from './Deposits';
-import RankTable from './Table';
+import Deposits from './example/Deposits';
+import RankTable from './example/Table';
 import Button from '@mui/material/Button';
 import SearchText from './SearchText';
 import TextField from '@mui/material/TextField';
+import BasicSelect from './SearchOption';
+import GenreTable from './GenreTable';
+import BookTable from './BookTable';
 
 const defaultTheme = createTheme();
 
 function Copyright(props) {
     return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://mui.com/">
+                Your Website
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
     );
-  }
-
+}
 export default function Search() {
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -67,36 +69,71 @@ export default function Search() {
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
-                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
-                                    <Typography
-                                        variant="h4"
-                                        noWrap
-                                        component="h4">
-                                        원하는 디자인의 책 표지를 생성할 수 있어요 📘
-                                    </Typography>
-                                    <Typography
-                                        variant="h4"
-                                        noWrap
-                                        component="h4">
-                                        키워드를 검색하여 최근 도서 트렌드를 확인할 수 있어요 🤗
-                                    </Typography>
-                                    <Typography
-                                        variant="h4"
-                                        noWrap
-                                        component="h4">
-                                        베스트 셀러 점수를 예측해 볼 수 있어요 📊
-                                    </Typography>
-                                    <Button variant="contained">지금 시작하기</Button>
-
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100px', justifyContent: 'center' }}>
+                                    <BasicSelect />
                                 </Paper>
                             </Grid>
                         </Grid>
                     </Container>
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={3}>
-
+                            {/* 장르 테이블 */}
+                            <Grid item xs={12} md={6}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                    <GenreTable />
+                                </Paper>
+                            </Grid>
+                            {/* 책 테이블 */}
+                            <Grid item xs={12} md={6}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                    <BookTable />
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
+                                    <Typography
+                                        variant="h4"
+                                        noWrap
+                                        component="h4">
+                                        검색한 후의 페이지
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                    {/* 검색한 후의 책 제목 또는 키워드가 출력될 예정 */}
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100px', justifyContent: 'center' }}>
+                                    <Typography
+                                        variant="h6"
+                                        noWrap
+                                        component="h6">
+                                        피를 마시는 새 / 이영도
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                    {/* 검색할때 선택했던 값들이 출력될 예정 */}
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100px', justifyContent: 'center' }}>
+                                    <BasicSelect />
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                        <Grid container spacing={3}>
                             {/* Chart */}
-                            <Grid item xs={12} md={8} lg={9}>
+                            <Grid item xs={12} >
                                 <Paper
                                     sx={{
                                         justifyContent: 'center',
@@ -109,27 +146,52 @@ export default function Search() {
                                     <Chart />
                                 </Paper>
                             </Grid>
-                            {/* Recent Deposits */}
-                            <Grid item xs={12} md={4} lg={3}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 240,
-                                    }}
-                                >
-                                    <Deposits />
+                        </Grid>
+                    </Container>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                        <Grid container spacing={3}>
+                            {/* 연관 장르 테이블 */}
+                            <Grid item xs={12} md={6}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                    <GenreTable />
                                 </Paper>
                             </Grid>
-                            {/* Recent Orders */}
-                            <Grid item xs={12}>
+                            {/* 연관 책 테이블 */}
+                            <Grid item xs={12} md={6}>
                                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                    <RankTable />
+                                    <BookTable />
                                 </Paper>
                             </Grid>
                         </Grid>
-                        <Copyright sx={{ pt: 4 }} />
+                        <Copyright sx={{ pt: 2 }} />
+                    </Container>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
+                                    <Typography
+                                        variant="h4"
+                                        noWrap
+                                        component="h4">
+                                        검색한 후의 페이지
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
+                                    <Typography
+                                        variant="h4"
+                                        noWrap
+                                        component="h4">
+                                        검색한 후의 페이지
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
                     </Container>
                 </Box>
             </Box>

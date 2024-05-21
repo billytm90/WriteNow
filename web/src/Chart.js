@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { LineChart} from '@mui/x-charts';
-import Title from './Title';
+import Title from './example/Title';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
