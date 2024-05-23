@@ -4,6 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+
 const genres = [
     'IT',
     '건강/취미',
@@ -66,7 +67,7 @@ export default function BasicSelect() {
   return (
     <Box sx={{ minWidth: 120 }}>
         {/* 장르 선택 */}
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
+      <FormControl sx={{ m: 1, minWidth: 120, backgroundColor:'white' }}>
         <InputLabel id="demo-simple-select-label">장르</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -88,7 +89,7 @@ export default function BasicSelect() {
       </FormControl>
 
           {/* 연도 선택 */}
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
+      <FormControl sx={{ m: 1, minWidth: 120, backgroundColor:'white' }}>
         <InputLabel id="demo-simple-select-label">연도 선택</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -110,7 +111,7 @@ export default function BasicSelect() {
       </FormControl>
 
           {/* 월 선택 */}
-      <FormControl  sx={{ m: 1, minWidth: 120 }}>
+      <FormControl  sx={{ m: 1, minWidth: 120, backgroundColor:'white' }}>
         <InputLabel id="demo-simple-select-label">월 선택</InputLabel>
         <Select
           labelId="demo-simple-select-label"

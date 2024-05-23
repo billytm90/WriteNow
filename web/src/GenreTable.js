@@ -13,6 +13,7 @@ import TablePagination from '@mui/material/TablePagination';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 
+import { useQuery } from '@tanstack/react-query';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -49,37 +50,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 // 테이블 row 색깔 설정 
 
 const columns = [
-  { id: 'rank', label: '순위', minWidth: 10 },
-  { id: 'genre', label: '장르', minWidth: 100 },
-  {
-    id: 'percentage',
-    label: '검색빈도',
-    minWidth: 170,
-    align: 'right',
-  },
-  
+  { id: 'id', label: 'ID', minWidth: 50 },
+  { id: 'title', label: '제복', minWidth: 200 },
+  { id: 'author_name', label: '작가', minWidth:100}
 ];
 
-function createData(rank, genre, percentage) {
 
-  return { rank, genre, percentage };
-}
-
-const rows = [
-  createData(1, 'IT','+4,000%'),
-  createData(2, '건강/취미','+3,000%'),
-  createData(3, '과학','+2,000%'),
-  createData(4, '수험서','+1,000%'),
-  createData(5, '여행','+900%'),
-  createData(6, '요리','+800%'),
-  createData(7, '인문학','+700%'),
-  createData(8, '자기계발','+600%'),
-  createData(9, '참고서','+500%'),
-  createData(10, '판타지','+400%'),
-
-];
-
-const GenreTable = function () {
+const GenreTable = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -92,6 +69,25 @@ const GenreTable = function () {
     setPage(0);
   };
 
+
+  const { data: books, isLoading, error } = useQuery({
+    queryFn: () =>
+      fetch('http://127.0.0.1:8000/api/books').then(
+        (res) => res.json()
+      ),
+    queryKey: ['books'],
+  });
+
+  // Show a loading message while data is fetching
+  if (isLoading) {
+    return <h2>Loading...</h2>;
+  }
+
+  // to handle error
+  if (error) {
+    return <div className="error">Error: error fetching</div>
+  }
+  const rows = books || [];
   return (
     <React.Fragment>
       <Title>Trending 장르</Title>
@@ -112,22 +108,18 @@ const GenreTable = function () {
         <TableBody>
           {rows
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === 'number'
-                          ? column.format(value)
-                          : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+            .map((row) => (
+              <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                {columns.map((column) => {
+                  const value = row[column.id];
+                  return (
+                    <StyledTableCell key={column.id} align={column.align}>
+                      {value}
+                    </StyledTableCell>
+                  );
+                })}
+              </StyledTableRow>
+            ))}
         </TableBody>
       </Table>
       <TablePagination
@@ -141,7 +133,7 @@ const GenreTable = function () {
       />
     </React.Fragment>
   );
-}
 
+};
 export default GenreTable;
 
