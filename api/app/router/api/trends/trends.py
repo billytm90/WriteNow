@@ -1,6 +1,8 @@
 import time
+from datetime import datetime
 from textwrap import dedent
 
+import numpy as np
 from mysql.connector.pooling import PooledMySQLConnection
 from typing_extensions import TypedDict
 
@@ -12,7 +14,6 @@ from app.preprocessing import text_to_vector, okt, remove_stopwords
 
 router = APIRouter(prefix="/trends")
 
-
 book_score_model = get_book_score_model()
 bt_model = get_book_title_word2vec_model()
 
@@ -22,8 +23,10 @@ class BookWithScore(TypedDict):
     title: str
     author_name: str
     publisher_name: str
+    published_date: datetime
     edition: int
     score: float
+    sales: int
 
 
 KeywordsWithScore = list[TypedDict("Keyword", {"keyword": str, "score": float})]
@@ -53,12 +56,13 @@ def get_related_books(query: str = Query(None), conn: PooledMySQLConnection = De
                                                                   bt_model.wv.most_similar(query, topn=10)]
         cursor = conn.cursor(buffered=True, dictionary=True)
         cursor.execute(
-            "select id, title, author_name, publisher_name, edition from books where match(title) against (%s) limit 11",
+            "select id, title, author_name, publisher_name, date(published_at) as published_date, edition from books where match(title) against (%s) limit 11",
             (' '.join(related_keywords),))
         related_books = cursor.fetchall()
         books_with_score = [{**book, "score": __get_score(book.get('title'))} for book in related_books if
                             book.get('title') != query]
-        return books_with_score[:10]
+        return [{**book, "sales": __get_sales_from_score(book.get("score"), book.get("published_date"))} for book in
+                books_with_score[:10]]
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
@@ -67,6 +71,8 @@ def get_related_books(query: str = Query(None), conn: PooledMySQLConnection = De
 def get_trend_books():
     books = __get_trend_books(100)
     books_with_score = [{**book, "predict_score": __get_score(book.get('title'))} for book in books]
+    books_with_score = [{**book, "sales": __get_sales_from_score(book.get("score"), book.get("published_date"))} for book in
+                        books_with_score]
     return sorted(books_with_score, key=lambda x: x['predict_score'], reverse=True)[:10]
 
 
@@ -105,6 +111,7 @@ def __get_trend_books(topn: int):
                            b.title                               as title,
                            b.author_name                         as author_name,
                            b.publisher_name                      as publisher_name,
+                           date(b.published_at)                  as published_date,
                            b.edition                             as edition,
                            bss.score                             as score,
                            bss.score * log(count(bss.score) + 1) as weighted_score,
@@ -118,7 +125,7 @@ def __get_trend_books(topn: int):
                     where bs.alias = 'aladin'
                       and bc.name = '컴퓨터/모바일'
                     group by b.id)
-            select id, title, author_name, publisher_name, edition, score, weighted_score
+            select id, title, author_name, publisher_name, published_date, edition, score, weighted_score
             from t1
             where s_ntile between 10 and 90
             order by t1.weighted_score desc
@@ -130,3 +137,40 @@ def __get_trend_books(topn: int):
 def __get_last_12_months():
     now = time.localtime()
     return [time.localtime(time.mktime((now.tm_year, now.tm_mon - n, 1, 0, 0, 0, 0, 0, 0)))[:2] for n in range(12)]
+
+
+def __get_sales_from_score(score: float, published_date: datetime.date):
+    a = -0.005
+    b = 0.001
+
+    def poly_func(x, a, b, c, d):
+        return a * x ** 3 + b * x ** 2 + c * x + d
+
+
+    def log_func(x, a, b, c):
+        return a * np.log(b * x) + c
+
+    def sales_growth_rate(days, a, b):
+        return max(a * np.exp(-b * days), 0)
+
+    days_since_release = (datetime.now() - datetime.combine(published_date, datetime.min.time())
+                          ).days
+    growth_rate = sales_growth_rate(days_since_release, a, b)
+
+    def poly_func_inverse(sales_point, days_since_release, a, b, c, d):
+        predicted_ratio = poly_func(days_since_release, a, b, c, d)
+        adjusted_sales = sales_point / predicted_ratio
+        sales = adjusted_sales / ((1 + growth_rate) ** (days_since_release / 30))
+        return sales
+
+    def log_func_inverse(sales_point, days_since_release, a, b, c):
+        predicted_ratio = log_func(days_since_release, a, b, c)
+        adjusted_sales = sales_point / predicted_ratio
+        sales = adjusted_sales / ((1 + growth_rate) ** (days_since_release / 30))
+        return sales
+
+    sales = poly_func_inverse(score, days_since_release, -1.43248524e-09, 5.94462011e-06, -7.52540932e-03, 3.53015792e+00)
+    if sales < 0:
+        sales = log_func_inverse(score, days_since_release, 0.5, 0.01, 1)
+
+    return int(sales)
