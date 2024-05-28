@@ -52,8 +52,8 @@ def get_related_books(query: str = Query(None), conn: PooledMySQLConnection = De
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
     try:
-        related_keywords = okt.morphs(remove_stopwords(query)) + [keyword for keyword, _ in
-                                                                  bt_model.wv.most_similar(query, topn=10)]
+        related_keywords = okt.morphs(query) + [keyword for keyword, _ in
+                                                bt_model.wv.most_similar(query, topn=10)]
         cursor = conn.cursor(buffered=True, dictionary=True)
         cursor.execute(
             "select id, title, author_name, publisher_name, date(published_at) as published_date, edition from books where match(title) against (%s) limit 11",
@@ -95,7 +95,18 @@ def get_book_trend(book_id: int, conn: PooledMySQLConnection = Depends(get_db_co
     last_12_months = [f'{year}년 {month}월' for year, month in __get_last_12_months()]
     titles = [book.get("title")] + [book.get("title") + f' {month}' for month in last_12_months[1:]]
     scores = [__get_score(title) for title in titles]
-    return [{"date": month, "score": score} for month, score in zip(last_12_months, scores)]
+    return [{"date": month, "score": score, "sales": __get_sales_from_score(score, book.get("published_date"))} for month, score
+            in
+            zip(last_12_months, scores)]
+
+
+@router.get("/keywords/{keyword}", response_model=list[TypedDict("_", {"date": str, "score": float})])
+def get_book_trend(keyword: str, conn: PooledMySQLConnection = Depends(get_db_connection)):
+    last_12_months = [f'{year}년 {month}월' for year, month in __get_last_12_months()]
+    titles = [keyword] + [keyword + f' {month}' for month in last_12_months[1:]]
+    scores = [__get_score(title) for title in titles]
+    return [{"date": month, "score": score} for month, score in
+            zip(last_12_months, scores)]
 
 
 def __get_score(text: str):
@@ -145,7 +156,6 @@ def __get_sales_from_score(score: float, published_date: datetime.date):
 
     def poly_func(x, a, b, c, d):
         return a * x ** 3 + b * x ** 2 + c * x + d
-
 
     def log_func(x, a, b, c):
         return a * np.log(b * x) + c
