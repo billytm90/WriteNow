@@ -42,7 +42,7 @@ export default function SearchText() {
               <Grid item xs={12}>
                 <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 2 }}>
+                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 2 }} >
                       장르별 트렌드 확인
                     </Typography>
                     {/* <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
@@ -73,7 +73,7 @@ export default function SearchText() {
                       }}
                     />
                   </form>
-                  <BasicSelect />
+                  {/* <BasicSelect /> */}
                 </Paper>
               </Grid>
             </Grid>

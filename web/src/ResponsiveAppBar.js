@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 
-const pages = ['트렌드 확인', '키워드 검색', '검색 결과', '연도별 트렌드', 'AI 표지생성'];
+const pages = ['트렌드 확인', '키워드 검색', '검색 결과', '연도별 트렌드', 'AI 표지생성', '키워드/책 검색'];
 const settings = ['프로필', '계정', '로그아웃'];
 
 export default function ResponsiveAppBar() {
@@ -113,7 +113,9 @@ export default function ResponsiveAppBar() {
                                                             ? '/YearTrend'
                                                             : page === 'AI 표지생성'
                                                                 ? '/GenerateImage'
-                                                                : '#'
+                                                                : page === '키워드/책 검색'
+                                                                    ? '/SharedInput'
+                                                                    : '#'
                                         }
                                         style={{ textDecoration: 'none', color: 'inherit' }}
                                     >

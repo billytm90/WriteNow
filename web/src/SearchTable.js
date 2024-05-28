@@ -14,6 +14,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import RelatedKeyword from './KeywordTable';
 
 const defaultTheme = createTheme();
 
@@ -53,9 +54,7 @@ const fetchRelatedBooks = async ({ queryKey }) => {
   return response.json();
 };
 
-const RelatedBooks = () => {
-  const [query, setQuery] = useState('');
-  const [searchResults, setSearchResults] = useState(null);
+const RelatedBooks = ({ query }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -63,16 +62,7 @@ const RelatedBooks = () => {
     queryKey: ['relatedBooks', query],
     queryFn: fetchRelatedBooks,
     enabled: !!query,
-    onSuccess: (data) => {
-      console.log('Fetched data:', data);
-      setSearchResults(data);
-    },
   });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setQuery(e.target.elements.query.value);
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -92,102 +82,55 @@ const RelatedBooks = () => {
   ];
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: 'white',
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
-        >
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius:'20px' }}>
-                  <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
-                    키워드 검색
-                  </Typography>
-                  <form onSubmit={handleSubmit} style={{ display: 'flex', marginBottom: '20px' }}>
-                    <TextField
-                      name="query"
-                      type="text"
-                      defaultValue={query}
-                      variant="outlined"
-                      placeholder="키워드 입력"
-                      fullWidth
-                      style={{ marginRight: '10px', backgroundColor: 'white' }}
-                    />
-                    <Button type="submit" variant="contained" color="primary">
-                      검색
-                    </Button>
-                  </form>
-                </Paper>
-              </Grid>
-            </Grid>
-          </Container>
-
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius:'20px' }}>
-                  <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
-                    검색 결과
-                  </Typography>
-                  {isLoading ? (
-                    <CircularProgress />
-                  ) : error ? (
-                    <Typography color="error">An error occurred: {error.message}</Typography>
-                  ) : (
-                    data && (
-                      <React.Fragment>
-                        <Table>
-                          <TableHead>
-                            <TableRow>
-                              {columns.map((column) => (
-                                <StyledTableCell2 key={column.id} align="left" style={{ minWidth: column.minWidth }}>
-                                  {column.label}
-                                </StyledTableCell2>
-                              ))}
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                              <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                {columns.map((column) => {
-                                  const value = row[column.id];
-                                  return (
-                                    <StyledTableCell key={column.id} align="left">
-                                      {value}
-                                    </StyledTableCell>
-                                  );
-                                })}
-                              </StyledTableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                        <TablePagination
-                          rowsPerPageOptions={[10, 25, 100]}
-                          component="div"
-                          count={data.length}
-                          rowsPerPage={rowsPerPage}
-                          page={page}
-                          onPageChange={handleChangePage}
-                          onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                      </React.Fragment>
-                    )
-                  )}
-                </Paper>
-              </Grid>
-            </Grid>
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
+    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
+      <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
+        검색 결과 - 도서
+      </Typography>
+      {isLoading ? (
+        <CircularProgress />
+      ) : error ? (
+        <Typography color="error">An error occurred: {error.message}</Typography>
+      ) : (
+        data && (
+          <React.Fragment>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <StyledTableCell2 key={column.id} align="left" style={{ minWidth: column.minWidth }}>
+                      {column.label}
+                    </StyledTableCell2>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                  <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <StyledTableCell key={column.id} align="left">
+                          {value}
+                        </StyledTableCell>
+                      );
+                    })}
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={data.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </React.Fragment>
+        )
+      )}
+    </Paper>
   );
 };
 

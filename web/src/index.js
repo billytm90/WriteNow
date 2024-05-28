@@ -10,6 +10,7 @@ import SearchText from "./SearchText";
 import SearchResult from "./SearchResult";
 import YearTrend from "./YearTrend";
 import GenerateImage from "./GenerateImage";
+import SharedInputComponent from "./SharedInput";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ root.render(
         <Route path="/Result" element={<SearchResult />} />
         <Route path="/YearTrend" element={<YearTrend />} />
         <Route path="/GenerateImage" element={<GenerateImage />} />
+        <Route path="/SharedInput" element={<SharedInputComponent />} />
       </Routes>
     </Router>
   </QueryClientProvider>

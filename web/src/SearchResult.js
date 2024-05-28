@@ -67,7 +67,7 @@ export default function SearchResult() {
                                             }}
                                         />
                                     </form>
-                                    <BasicSelect />
+                                    {/* <BasicSelect /> */}
                                 </Paper>
                             </Grid>
                         </Grid>
