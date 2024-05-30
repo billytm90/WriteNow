@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TextField, Button, CircularProgress, List, ListItem, ListItemText, Container, Typography } from '@mui/material';
 import Table from '@mui/material/Table';
@@ -30,7 +30,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableCell2 = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "white",
+    backgroundColor: "#EEF3FF",
     color: 'black',
   },
   [`&.${tableCellClasses.body}`]: {
@@ -64,6 +64,12 @@ const RelatedBooks = ({ query }) => {
     enabled: !!query,
   });
 
+  const sortedData = useMemo(() => {
+    if (!data) return [];
+    // Sort the data array in descending order of the score
+    return [...data].sort((a, b) => b.score - a.score);
+  }, [data]);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -75,23 +81,20 @@ const RelatedBooks = ({ query }) => {
 
   const columns = [
     { id: 'title', label: '제목', minWidth: 170 },
-    { id: 'author_name', label: '작가', minWidth: 100 },
-    { id: 'publisher_name', label: '출판사', minWidth: 100 },
-    { id: 'edition', label: '판본', minWidth: 100 },
     { id: 'score', label: 'Sales 점수', minWidth: 100 },
   ];
 
   return (
-    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
+    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px', border: '1px solid #4028ca', borderRadius: '20px' }}>
       <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
-        검색 결과 - 도서
+        {query ? `${query}의 연관 도서` : '검색한 키워드의 연관 도서'}
       </Typography>
       {isLoading ? (
         <CircularProgress />
       ) : error ? (
         <Typography color="error">An error occurred: {error.message}</Typography>
       ) : (
-        data && (
+        sortedData.length > 0 ? (
           <React.Fragment>
             <Table>
               <TableHead>
@@ -104,30 +107,29 @@ const RelatedBooks = ({ query }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <StyledTableCell key={column.id} align="left">
-                          {value}
-                        </StyledTableCell>
-                      );
-                    })}
+                    {columns.map((column) => (
+                      <StyledTableCell key={column.id} align="left">
+                        {column.id === 'score' ? Math.ceil(row[column.id]) : row[column.id]}
+                      </StyledTableCell>
+                    ))}
                   </StyledTableRow>
                 ))}
               </TableBody>
             </Table>
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
+            {/* <TablePagination
+              rowsPerPageOptions={[]}
               component="div"
-              count={data.length}
+              count={sortedData.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            /> */}
           </React.Fragment>
+        ) : (
+          <Typography variant="body1"></Typography>
         )
       )}
     </Paper>

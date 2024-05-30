@@ -14,6 +14,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import WholeBookTrend from './WholeBookTrend';
+import WholeKeywordTrend from './WholeKeywordTrend';
 
 const ariaLabel = { 'aria-label': 'description' };
 
@@ -42,7 +44,7 @@ function YearSelect({ onChange }) {
     return (
         <Box sx={{ minWidth: 120 }}>
             {/* 연도 선택 */}
-            <FormControl sx={{ m: 1, minWidth: 120, backgroundColor:'white' }}>
+            <FormControl sx={{ m: 1, minWidth: 120, backgroundColor: 'white' }}>
                 <InputLabel id="demo-simple-select-label">연도 선택</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -86,7 +88,7 @@ export default function YearTrend() {
                         overflow: 'auto',
                     }}
                 >
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                    {/* <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
                                 <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100px', justifyContent: 'center', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
@@ -94,12 +96,12 @@ export default function YearTrend() {
                                 </Paper>
                             </Grid>
                         </Grid>
-                    </Container>
+                    </Container> */}
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <Box  sx={{ position: 'relative', overflow: 'hidden', width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
-                                    <img src={books} alt='Description' style={{ opacity: 0.5, width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
+                                <Box elevation={5} sx={{ position: 'relative', overflow: 'hidden', width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
+                                    <img src={books} alt='Description' style={{ opacity: 0.3, width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
                                     <Typography
                                         variant="h4"
                                         sx={{
@@ -107,12 +109,12 @@ export default function YearTrend() {
                                             top: '50%',
                                             left: '50%',
                                             transform: 'translate(-50%, -50%)',
-                                            color: 'white',
+                                            color: 'black',
                                             padding: '8px',
                                             borderRadius: '4px',
                                         }}
                                     >
-                                        {selectedYear}년 장르별 베스트셀러
+                                        최신 트렌드 책과 키워드
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -121,48 +123,12 @@ export default function YearTrend() {
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={3}>
                             {/* 장르 테이블 */}
-                            <Grid item xs={12} md={6}>
-                                <Paper elevation={5} sx={{ p: 1, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <BookTable />
-                                </Paper>
+                            <Grid item xs={12} sm={8}>
+                                <WholeBookTrend />
                             </Grid>
                             {/* 책 테이블 */}
-                            <Grid item xs={12} md={6}>
-                                <Paper elevation={5} sx={{ p: 1, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <BookTable />
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    </Container>
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            {/* 장르 테이블 */}
-                            <Grid item xs={12} md={6}>
-                                <Paper elevation={5} sx={{ p: 1, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <BookTable />
-                                </Paper>
-                            </Grid>
-                            {/* 책 테이블 */}
-                            <Grid item xs={12} md={6}>
-                                <Paper elevation={5} sx={{ p: 1, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <BookTable />
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    </Container>
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            {/* 장르 테이블 */}
-                            <Grid item xs={12} md={6}>
-                                <Paper elevation={5} sx={{ p: 1, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <BookTable />
-                                </Paper>
-                            </Grid>
-                            {/* 책 테이블 */}
-                            <Grid item xs={12} md={6}>
-                                <Paper elevation={5} sx={{ p: 1, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <BookTable />
-                                </Paper>
+                            <Grid item xs={12} sm={4}>
+                                <WholeKeywordTrend />
                             </Grid>
                         </Grid>
                     </Container>

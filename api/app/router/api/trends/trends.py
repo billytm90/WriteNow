@@ -73,7 +73,7 @@ def get_trend_books():
     books_with_score = [{**book, "predict_score": __get_score(book.get('title'))} for book in books]
     books_with_score = [{**book, "sales": __get_sales_from_score(book.get("score"), book.get("published_date"))} for book in
                         books_with_score]
-    return sorted(books_with_score, key=lambda x: x['predict_score'], reverse=True)[:10]
+    return sorted(books_with_score, key=lambda x: x['predict_score'], reverse=True)[:100]
 
 
 @router.get('/keywords', response_model=KeywordsWithScore)
@@ -83,7 +83,7 @@ def get_trend_keywords():
     keywords_with_score = [
         {"keyword": keyword, "score": __get_score(keyword)} for keyword in uniq_keywords]
     keywords_with_score = sorted(keywords_with_score, key=lambda x: x.get("score"), reverse=True)
-    return keywords_with_score[:100]
+    return keywords_with_score[:200]
 
 
 @router.get("/books/{book_id}", response_model=list[TypedDict("_", {"date": str, "score": float})])
@@ -118,30 +118,46 @@ def __get_trend_books(topn: int):
     with pool.get_connection() as conn:
         cursor = conn.cursor(buffered=True, dictionary=True)
         cursor.execute(dedent("""\
-            with t1 as (select b.id                                  as id,
-                           b.title                               as title,
-                           b.author_name                         as author_name,
-                           b.publisher_name                      as publisher_name,
-                           date(b.published_at)                  as published_date,
-                           b.edition                             as edition,
-                           bss.score                             as score,
-                           bss.score * log(count(bss.score) + 1) as weighted_score,
-                           ntile(100) over (order by bss.score)  as s_ntile
-                    from books b
-                             join books_in_bookstores bib on b.id = bib.book_id
-                             join book_categories_of_books bcib on b.id = bcib.book_id
-                             join book_categories bc on bcib.category_id = bc.id
-                             join bookstores bs on bib.store_id = bs.id
-                             join book_sales_scores bss on b.id = bss.book_id and bs.id = bss.store_id
-                    where bs.alias = 'aladin'
-                      and bc.name = '컴퓨터/모바일'
-                    group by b.id)
-            select id, title, author_name, publisher_name, published_date, edition, score, weighted_score
-            from t1
-            where s_ntile between 10 and 90
-            order by t1.weighted_score desc
-            limit %s
-            """), (topn,))
+            with t1 as (
+                select 
+                    b.id as id,
+                    b.title as title,
+                    b.author_name as author_name,
+                    b.publisher_name as publisher_name,
+                    date(b.published_at) as published_date,
+                    b.edition as edition,
+                    bss.score as score,
+                    bss.score * log(count(bss.score) + 1) as weighted_score,
+                    ntile(100) over (order by bss.score) as s_ntile
+                from 
+                    books b
+                join 
+                    books_in_bookstores bib on b.id = bib.book_id
+                join 
+                    book_categories_of_books bcib on b.id = bcib.book_id
+                join 
+                    book_categories bc on bcib.category_id = bc.id
+                join 
+                    bookstores bs on bib.store_id = bs.id
+                join 
+                    book_sales_scores bss on b.id = bss.book_id and bs.id = bss.store_id
+                where 
+                    bs.alias = 'aladin'
+                    and bc.name = '컴퓨터/모바일'
+                group by 
+                    b.id, b.title, b.author_name, b.publisher_name, b.published_at, b.edition, bss.score
+            )
+            select 
+                id, title, author_name, publisher_name, published_date, edition, score, weighted_score
+            from 
+                t1
+            where 
+                s_ntile between 10 and 90
+            order by 
+                weighted_score desc
+            limit 
+                %s
+        """), (topn,))
         return cursor.fetchall()
 
 

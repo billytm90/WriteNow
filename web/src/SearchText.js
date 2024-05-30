@@ -78,22 +78,6 @@ export default function SearchText() {
               </Grid>
             </Grid>
           </Container>
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* 장르 테이블 */}
-              <Grid item xs={12} md={6}>
-                <Paper elevation={5} sx={{ p: 1, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                  <BookTable />
-                </Paper>
-              </Grid>
-              {/* 책 테이블 */}
-              <Grid item xs={12} md={6}>
-                <Paper elevation={5} sx={{ p: 1, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                  <BookTable />
-                </Paper>
-              </Grid>
-            </Grid>
-          </Container>
         </Box>
       </Box>
     </ThemeProvider >

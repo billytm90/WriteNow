@@ -1,138 +1,124 @@
 import * as React from 'react';
-import { LineChart} from '@mui/x-charts';
-import Title from './example/Title';
+import { useState, useEffect } from 'react';
+import { BarChart, LineChart } from '@mui/x-charts';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 import { Typography } from '@mui/material';
 
+// StyledTableCell as defined previously
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#01579b", // Change to darkblue
+    backgroundColor: "#01579b",
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
   },
 }));
-// 테이블 1차 헤더 색깔
 
-const otherSetting = {
-  yAxis: [{ label: '관심도' }],
-  sx: {
-    [`& .${axisClasses.left} .${axisClasses.label}`]: {
-      transform: 'translateX(-40px)',
-    },
-  },
+
+const getCurrentMonthYearLabels = () => {
+  const labels = [];
+  let currentYear = 2024; // Start from 2024년
+  let currentMonth = 5; // Start from 5월
+
+  for (let i = 0; i < 12; i++) {
+    labels.push(`${currentYear}년 ${currentMonth}월`);
+
+    // Update month and year
+    if (currentMonth == 1) {
+      currentMonth = 12;
+      currentYear--;
+    } else {
+      currentMonth--;
+    }
+  }
+
+  return labels.reverse(); // Reverse to have chronological order
 };
 
-export default function TestChart() {
+export default function TestChart({ query }) {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!query) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/trends/keywords/${query}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const result = await response.json();
+        const transformedData = result.map((item, index) => ({
+          score: Number(item.score),
+        }));
+        setData(transformedData);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [query]);
+
+  if (!query) {
+    return <Typography variant="body1"></Typography>;
+  }
+
+  if (loading) {
+    return <Typography variant="body1">로딩 중...</Typography>;
+  }
+
+  if (error) {
+    return <Typography color="error">오류가 발생했습니다.: {error.message}</Typography>;
+  }
+
+  // Get x-axis labels
+  const xLabels = getCurrentMonthYearLabels();
+
+  // Reverse the data array if needed
+  const reversedData = [...data].reverse();
+
+  // Log the xLabels array to the console
+  console.log("xLabels:", xLabels);
+
+  // Prepare the dataset with correct x-axis data
+  const dataset = xLabels.map((label, index) => ({
+    month: label,
+    score: reversedData[index] ? reversedData[index].score : null,
+  }));
+
   return (
-    <React.Fragment>
-      
-      <div style={{ width: '100%', flexGrow: 1, overflow: 'hidden'}}>
-        <LineChart
-          margin={{left:80}}
-          xAxis={[
-            {
-              dataKey: 'month',
-              valueFormatter: (value) => value.toString(),
-              min: 1,
-              max: 12,
-              label: 'Month(월)'
-            },
-          ]}
-         
-          
-          series={Object.keys(keyToLabel).map((key) => ({
-            dataKey: key,
-            label: keyToLabel[key],
-            curve: "linear",
-          }))}
-          dataset={worldElectricityProduction}
-          {...customize}
-          {...otherSetting}
-          grid={{ vertical: true, horizontal: true }}
-          // xAxisName="Month" // Adding x-axis name
-          // yAxisName="Sales" // Adding y-axis name
-        />
-      </div>
-    </React.Fragment>
+    <div style={{ width: '100%', flexGrow: 1, overflow: 'hidden' }}>
+      <LineChart
+        margin={{ left: 80 }}
+        xAxis={[
+          {
+            dataKey: 'month',
+            scaleType: 'band',
+            categories: xLabels,
+          },
+        ]}
+        series={[
+          {
+            dataKey: 'score',
+            label: '관심도',
+            curve: 'linear',
+          },
+        ]}
+        dataset={dataset}
+        height={300}
+        legend={{ hidden: true }}
+        grid={{ vertical: false, horizontal: true }}
+      />
+    </div>
   );
 }
-
-const worldElectricityProduction = [
-
-  {
-    country: 'World',
-    month: 1,
-    coal: 9518,
-  },
-  {
-    country: 'World',
-    month: 2,
-    coal: 9899,
-  },
-  {
-    country: 'World',
-    month: 3,
-    coal: 9680,
-  },
-  {
-    country: 'World',
-    month: 4,
-    coal: 9292,
-  },
-  {
-    country: 'World',
-    month: 5,
-    coal: 10081,
-  },
-  {
-    country: 'World',
-    month: 6,
-    coal: 10190,
-  },
-  {
-    country: 'World',
-    month: 7,
-    coal: 10390,
-  },
-  {
-    country: 'World',
-    month: 8,
-    coal: 10521,
-  },
-  {
-    country: 'World',
-    month: 9,
-    coal: 10712,
-  },
-  {
-    country: 'World',
-    month: 10,
-    coal: 10931,
-  },
-  {
-    country: 'World',
-    month: 11,
-    coal: 11130,
-  },
-  {
-    country: 'World',
-    month: 12,
-    coal: 11320,
-  },
-];
-const keyToLabel = {
-  coal: '판매지수 : ',
-};
-const customize = {
-  height: 300,
-  legend: { hidden: true },
-  // margin: { top: 5 },
-};
-
-
-
-
