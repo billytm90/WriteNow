@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { ThemeProvider, Container, Grid, Box, CssBaseline, Paper, Typography, TextField, Button } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { styled, createTheme } from '@mui/material/styles';
+import { CSSTransition } from 'react-transition-group';
 import RelatedBooks from './SearchTable';
 import RelatedKeyword from './KeywordTable';
 import TestChart from './Chart';
+import './fade.css'; // Make sure you have the corresponding CSS
+
 
 const defaultTheme = createTheme();
 
@@ -58,10 +61,10 @@ const SharedInputComponent = () => {
                                 </Grid>
                             </Grid>
                         </Container>
-                        {submittedQuery && (
+                        <CSSTransition in={!!submittedQuery} timeout={5000} classNames="fade" unmountOnExit>
                             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                                 <Grid container spacing={3}>
-                                    <Grid item xs={12} >
+                                    <Grid item xs={12}>
                                         <Paper
                                             elevation={5}
                                             sx={{
@@ -70,7 +73,8 @@ const SharedInputComponent = () => {
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 height: '100%',
-                                                border: '1px solid #4028ca', borderRadius: '20px'
+                                                border: '1px solid #4028ca',
+                                                borderRadius: '20px'
                                             }}
                                         >
                                             <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 2 }}>
@@ -81,19 +85,19 @@ const SharedInputComponent = () => {
                                     </Grid>
                                 </Grid>
                             </Container>
-                        )}
-                        {submittedQuery && (
+                        </CSSTransition>
+                        <CSSTransition in={!!submittedQuery} timeout={300} classNames="fade" unmountOnExit>
                             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                                 <Grid container spacing={3}>
-                                    <Grid item xs={12} sm={8}> {/* Adjust the size as needed */}
+                                    <Grid item xs={12} sm={8}>
                                         <RelatedBooks query={query} />
                                     </Grid>
-                                    <Grid item xs={12} sm={4}> {/* Adjust the size as needed */}
+                                    <Grid item xs={12} sm={4}>
                                         <RelatedKeyword query={query} />
                                     </Grid>
                                 </Grid>
                             </Container>
-                        )}
+                        </CSSTransition>
                     </Box>
                 </Box>
             </QueryClientProvider>

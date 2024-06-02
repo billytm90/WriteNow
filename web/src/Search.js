@@ -11,8 +11,13 @@ import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import { Button } from '@mui/material';
 import TestChart from './Chart';
+import ChartCarousel from './ChartCarousel';
+import books from './images/books.jpg'
+import { useNavigate } from 'react-router-dom';
+
 
 const defaultTheme = createTheme();
+
 
 function Copyright(props) {
     return (
@@ -27,6 +32,12 @@ function Copyright(props) {
     );
 }
 export default function Search() {
+    const navigate = useNavigate();
+
+    const handleButtonClick = () => {
+        // Navigate to "/SharedInput" route
+        navigate('/YearTrend');
+    };
     return (
         <ThemeProvider theme={defaultTheme}>
             {/* <Paper  
@@ -47,6 +58,7 @@ export default function Search() {
                     }}
                 >
                     <Toolbar />
+
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
@@ -69,38 +81,70 @@ export default function Search() {
                             </Grid>
                         </Grid>
                     </Container>
-                    <Container maxWidth="lg" sx={{ mt: 1, mb: 1, }}>
-                        <Grid container spacing={0.5}>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
                             <Grid item xs={12}>
-                                <Paper elevation={0} sx={{ p: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
-                                    <Typography
-                                        variant="h5"
-                                        noWrap
-                                        component="h5">
-                                        키워드를 검색하여 최근 도서 트렌드를 확인할 수 있어요!
-                                    </Typography>
-                                    <Button type="submit" variant="contained" color="primary" sx={{ fontSize: '16px', padding: '10px 20px', minWidth: '150px' }}>
-                                        시작하기
-                                    </Button>
+                                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center', border: '1px solid #4028ca', borderRadius: '20px' }}>
+                                    <ChartCarousel />
                                 </Paper>
                             </Grid>
                         </Grid>
                     </Container>
-                    <Container maxWidth="lg" sx={{ mt: 1, mb: 1, }}>
-                        <Grid container spacing={0.5}>
-                            <Grid item xs={12}>
-                                <Paper elevation={0} sx={{ p: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
-                                    <Typography
-                                        variant="h5"
-                                        noWrap
-                                        component="h5">
-                                        관심있는 분야의 트렌드를 확인해보세요!
-                                    </Typography>
-                                    <TestChart/>
-                                </Paper>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <Box
+                                    elevation={5}
+                                    sx={{
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        width: '100%',
+                                        height: 'auto',
+                                        maxWidth: '100%',
+                                        maxHeight: '100%',
+                                        backgroundColor: '#EEF3FF',
+                                        borderRadius: '20px',
+                                    }}
+                                >
+                                    <img
+                                        src={books}
+                                        alt='Description'
+                                        style={{ opacity: 0.3, width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            textAlign: 'center',
+                                            color: 'black',
+                                        }}
+                                    >
+                                        <Typography
+                                            variant="h4"
+                                            sx={{
+                                                padding: '8px',
+                                                borderRadius: '4px',
+                                            }}
+                                        >
+                                            IT분야의 최신 트렌드를 한눈에!
+                                        </Typography>
+                                        <Button
+                                            onClick={handleButtonClick}
+                                            variant="contained"
+                                            color="primary"
+                                            size='large'
+                                            sx={{ mt: 2 }}
+                                        >
+                                            지금 확인하기
+                                        </Button>
+                                    </Box>
+                                </Box>
                             </Grid>
                         </Grid>
                     </Container>
+                    
                     <Copyright sx={{ pt: 2 }} />
 
                 </Box>
