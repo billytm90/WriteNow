@@ -7,9 +7,26 @@ import RelatedBooks from './SearchTable';
 import RelatedKeyword from './KeywordTable';
 import TestChart from './Chart';
 import './fade.css'; // Make sure you have the corresponding CSS
+import Link from '@mui/material/Link';
 
 
-const defaultTheme = createTheme();
+function Copyright(props) {
+    return (
+        <Typography to="/" variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="http://localhost:3000">
+                PyveGuys
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+const theme = createTheme({
+    typography: {
+        fontFamily: '"Noto Sans KR", sans-serif',
+    },
+});
 
 const queryClient = new QueryClient();
 
@@ -24,7 +41,7 @@ const SharedInputComponent = () => {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <Box sx={{ display: 'flex' }}>
                     <CssBaseline />
@@ -86,7 +103,7 @@ const SharedInputComponent = () => {
                                 </Grid>
                             </Container>
                         </CSSTransition>
-                        <CSSTransition in={!!submittedQuery} timeout={300} classNames="fade" unmountOnExit>
+                        <CSSTransition in={!!submittedQuery} timeout={5000} classNames="fade" unmountOnExit>
                             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} sm={8}>
@@ -98,6 +115,7 @@ const SharedInputComponent = () => {
                                 </Grid>
                             </Container>
                         </CSSTransition>
+                        <Copyright sx={{ pt: 2 }} />
                     </Box>
                 </Box>
             </QueryClientProvider>

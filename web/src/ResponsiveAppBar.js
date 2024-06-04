@@ -50,7 +50,7 @@ export default function ResponsiveAppBar() {
                             sx={{
                                 mr: 2,
                                 display: { xs: 'none', md: 'flex' },
-                                fontFamily: 'monospace',
+                                fontFamily: '"Kodchasan", sans-serif', // Set the specific font here
                                 fontWeight: 700,
                                 letterSpacing: '.3rem',
                                 color: 'black',

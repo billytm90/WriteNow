@@ -5,73 +5,86 @@ import Toolbar from '@mui/material/Toolbar';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
-import TestChart from './Chart';
-import { Box, Button, Container, FormControl, FormControlLabel, Radio, RadioGroup, TextField, Typography, Divider } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import { Box, Button, Container, FormControl, TextField, Typography, Divider, InputLabel, MenuItem, Select } from '@mui/material';
+import axios from 'axios';
 
-const defaultTheme = createTheme();
+const theme = createTheme({
+    typography: {
+        fontFamily: '"Noto Sans KR", sans-serif',
+    },
+});
 
-const imageSize = [
-    '1024 x 1024',
-    '1280 x 768',
-    '768 x 1280',
-    '2048 x 2048',
-    '2048 x 1536',
-    '1536 x 2048'
-]
 
-const samples = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8
-]
+const samples = [1, 2, 3];
+
+const sizes = [
+    { label: "512 x 512", width: 512, height: 512 },
+    { label: "640 x 640", width: 640, height: 640 },
+];
 
 function Copyright(props) {
     return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        <Typography to="/" variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
+            <Link color="inherit" href="http://localhost:3000">
+                PyveGuys
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
     );
 }
+
 export default function GenerateImage() {
+    const [prompt, setPrompt] = useState('');
+    const [numImages, setNumImages] = useState(1);
+    // const [width, setWidth] = useState(512);
+    // const [height, setHeight] = useState(512);
+    const [selectedSize, setSelectedSize] = useState(sizes[0]); // Initialize with the first size option
+    const [generatedImages, setGeneratedImages] = useState([]);
 
-    const [size, setSize] = React.useState('');
+    const handleGenerateImage = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/cover/generate_image/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    prompt,
+                    num_images: numImages,
+                    height: selectedSize.height,
+                    width: selectedSize.width
+                }),
+            });
 
-    const [sample, setSample] = React.useState('');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
 
-    const handleChange1 = (event) => {
-        setSize(event.target.value);
+            const data = await response.json(); // JSON 형태로 응답을 받음
+            const imagesBase64 = data.images; // 서버에서 보낸 base64 인코딩된 이미지 배열
+
+            // base64 인코딩된 이미지를 디코딩하여 이미지 URL로 변환
+            const imageUrls = imagesBase64.map(base64Image => `data:image/png;base64,${base64Image}`);
+            setGeneratedImages([...generatedImages, ...imageUrls]);
+        } catch (error) {
+            console.error('Error generating image:', error);
+        }
     };
-    const handleChange2 = (event) => {
-        setSample(event.target.value);
-    };
 
-    const [selectedOption, setSelectedOption] = useState('summary');
-
-    const handleOptionChange = (event) => {
-        setSelectedOption(event.target.value);
+    const handleSaveImage = (imageBase64, index) => {
+        const link = document.createElement('a');
+        link.href = imageBase64;
+        link.download = `generated_image_${index}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            {/* <Paper  
-                sx={{
-                    width: '100%',
-                }}>
-                <ResponsiveAppBar />
-            </Paper> */}
+        <ThemeProvider theme={theme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
                 <Box
@@ -83,106 +96,90 @@ export default function GenerateImage() {
                         overflow: 'auto',
                     }}
                 >
-                    <Toolbar />
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
-                                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <FormControl component="fieldset">
-                                        <RadioGroup row value={selectedOption} onChange={handleOptionChange}>
-                                            <FormControlLabel value="summary" control={<Radio />} label="도서 요약본" />
-                                            <FormControlLabel value="prompt" control={<Radio />} label="프롬프트 입력" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                    <Divider sx={{ my: 2, borderBottomWidth: 2, borderColor: 'primary.main' }} /> {/* Divider to separate sections */}
-                                    <Box mt={4}>
-                                        {selectedOption === 'summary' ? (
-                                            <React.Fragment>
-                                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
-                                                    도서 요약본 입력
-                                                </Typography>
-                                                <TextField
-                                                    placeholder="작성하신 도서의 요약본을 입력해주세요."
-                                                    multiline
-                                                    rows={6}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                />
-                                            </React.Fragment>
-                                        ) : (
-                                            <React.Fragment>
-                                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
-                                                    프롬프트 입력
-                                                </Typography>
-                                                <TextField
-                                                    placeholder="ex) 언덕 위 나무와 오두막집"
-                                                    variant="outlined"
-                                                    fullWidth
-                                                />
-                                            </React.Fragment>
-
-                                        )}
-                                    </Box>
-                                    <Box sx={{ minWidth: 120 }}>
-                                        {/* 사이즈 선택 */}
-                                        <FormControl sx={{ m: 1, minWidth: 200, backgroundColor: 'white' }}>
-                                            <InputLabel id="demo-simple-select-label">이미지 사이즈</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={size}
-                                                label="이미지 사이즈"
-                                                onChange={handleChange1}
-                                            >
-                                                {imageSize.map((size) => (
-                                                    <MenuItem
-                                                        key={size}
-                                                        value={size}
-                                                    >
-                                                        {size}
-                                                    </MenuItem>
-                                                ))}
-
-                                            </Select>
-                                        </FormControl>
-
-                                        {/* 숫자 선택 */}
-                                        <FormControl sx={{ m: 1, minWidth: 120, backgroundColor: 'white' }}>
+                                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', border: '1px solid #4028ca', borderRadius: '20px' }}>
+                                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
+                                        프롬프트 입력
+                                    </Typography>
+                                    <TextField
+                                        placeholder="ex) 언덕 위 나무와 오두막집"
+                                        variant="outlined"
+                                        fullWidth
+                                        value={prompt}
+                                        onChange={(e) => setPrompt(e.target.value)}
+                                        sx={{ mb: 2, backgroundColor: 'white' }}
+                                    />
+                                    <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                                        <FormControl sx={{ minWidth: 120, backgroundColor: 'white' }}>
                                             <InputLabel id="demo-simple-select-label">이미지 수</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={sample}
+                                                value={numImages}
                                                 label="이미지 수"
-                                                onChange={handleChange2}
+                                                onChange={(e) => setNumImages(Number(e.target.value))}
                                             >
-                                                {samples.map((sample) => (
+                                                {samples.map((numImages) => (
                                                     <MenuItem
-                                                        key={sample}
-                                                        value={sample}
+                                                        key={numImages}
+                                                        value={numImages}
                                                     >
-                                                        {sample}
+                                                        {numImages}
                                                     </MenuItem>
                                                 ))}
-
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl sx={{ minWidth: 120, backgroundColor: 'white' }}>
+                                            <InputLabel id="size-select-label">Size</InputLabel>
+                                            <Select
+                                                labelId="size-select-label"
+                                                id="size-select"
+                                                value={selectedSize}
+                                                label="Size"
+                                                onChange={(e) => setSelectedSize(e.target.value)}
+                                            >
+                                                {sizes.map((option) => (
+                                                    <MenuItem
+                                                        key={option.label}
+                                                        value={option}
+                                                    >
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
                                             </Select>
                                         </FormControl>
                                     </Box>
-
                                     <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <Button variant="contained" color="primary">
+                                        <Button variant="contained" color="primary" onClick={handleGenerateImage}>
                                             이미지 생성
                                         </Button>
                                     </Box>
+                                    {generatedImages.length > 0 && (
+                                        <Box mt={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                            {generatedImages.map((image, index) => (
+                                                <React.Fragment>
+                                                    <Box key={index} sx={{}}>
+                                                        <img src={image} alt={`Generated ${index}`} />
+                                                    </Box>
+                                                    <Box key={index} sx={{ mb: 3 }}>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            size='small' onClick={() => handleSaveImage(image, index)}>이미지 저장</Button>
+                                                    </Box>
+                                                </React.Fragment>
+                                            ))}
+                                        </Box>
+                                    )}
                                 </Paper>
                             </Grid>
                         </Grid>
                     </Container>
-
                     <Copyright sx={{ pt: 2 }} />
-
                 </Box>
             </Box>
         </ThemeProvider>
-    )
+    );
 }

@@ -5,10 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Chart from './Chart';
-import BasicSelect from './SearchOption';
-import BookTable from './BookTable';
+import Link from '@mui/material/Link';
 import books from './images/books.jpg'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,10 +13,25 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import WholeBookTrend from './WholeBookTrend';
 import WholeKeywordTrend from './WholeKeywordTrend';
-
+const theme = createTheme({
+    typography: {
+        fontFamily: '"Noto Sans KR", sans-serif',
+    },
+});
+function Copyright(props) {
+    return (
+        <Typography to="/" variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="http://localhost:3000">
+                PyveGuys
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
 const ariaLabel = { 'aria-label': 'description' };
 
-const defaultTheme = createTheme();
 const years = [
     2014,
     2015,
@@ -76,7 +88,7 @@ export default function YearTrend() {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <ThemeProvider theme={theme}>
             <Box sx={{ display: 'fixed' }}>
                 <CssBaseline />
                 <Box
@@ -132,6 +144,7 @@ export default function YearTrend() {
                             </Grid>
                         </Grid>
                     </Container>
+                    <Copyright sx={{ pt: 2 }} />
                 </Box>
             </Box>
         </ThemeProvider>

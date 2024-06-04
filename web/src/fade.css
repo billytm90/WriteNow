@@ -1,14 +1,44 @@
 .fade-enter {
     opacity: 0;
 }
+
 .fade-enter-active {
     opacity: 1;
     transition: opacity 5s;
 }
+
 .fade-exit {
     opacity: 1;
 }
+
 .fade-exit-active {
     opacity: 0;
-    transition: opacity 300ms;
+    transition: opacity 5s;
+}
+
+.width-enter {
+    width: 0;
+}
+
+.width-enter-active {
+    width: 100%;
+    transition: width 5000ms;
+}
+
+.width-exit {
+    width: 100%;
+}
+
+.width-exit-active {
+    width: 0;
+    transition: width 5000ms;
+}
+
+.height-enter {
+    height: 0;
+}
+
+.height-enter-active {
+    height: 100%;
+    transition: height 5000ms;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import ResponsiveAppBar from './ResponsiveAppBar';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,19 +12,30 @@ import Link from '@mui/material/Link';
 import { Button } from '@mui/material';
 import TestChart from './Chart';
 import ChartCarousel from './ChartCarousel';
-import books from './images/books.jpg'
+import books from './images/books.jpg';
 import { useNavigate } from 'react-router-dom';
+import styled, { createGlobalStyle } from 'styled-components';
+import "./styles.css";
+import AiCarousel from './AiCarousel';
+import ai_sample2 from './images/ai_sample2.jpg';
+import ai_sample3 from './images/ai_sample3.jpg';
+import ai_sample4 from './images/ai_sample4.jpg';
+import ai_sample5 from './images/ai_sample5.jpg';
+import ai_sample6 from './images/ai_sample6.jpg';
+import ai_sample7 from './images/ai_sample7.jpg';
 
-
-const defaultTheme = createTheme();
-
+const theme = createTheme({
+    typography: {
+        fontFamily: '"Noto Sans KR", sans-serif',
+    },
+});
 
 function Copyright(props) {
     return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        <Typography to="/" variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
+            <Link color="inherit" href="http://localhost:3000">
+                PyveGuys
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -39,7 +50,7 @@ export default function Search() {
         navigate('/YearTrend');
     };
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <ThemeProvider theme={theme}>
             {/* <Paper  
                 sx={{
                     width: '100%',
@@ -57,7 +68,6 @@ export default function Search() {
                         overflow: 'auto',
                     }}
                 >
-                    <Toolbar />
 
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
                         <Grid container spacing={1}>
@@ -66,7 +76,10 @@ export default function Search() {
                                     <Typography
                                         variant="h3"
                                         noWrap
-                                        component="h3">
+                                        component="h3"
+                                        sx={{
+                                            fontFamily: '"Kodchasan", sans-serif', // Set the specific font here
+                                        }}>
                                         <Box component="span" sx={{ color: '#3399FF' }}>W</Box>
                                         <Box component="span" sx={{ color: 'black' }}>rite Now</Box>
                                         <Box component="span" sx={{ color: '#3399FF' }}>!</Box>
@@ -86,6 +99,17 @@ export default function Search() {
                             <Grid item xs={12}>
                                 <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center', border: '1px solid #4028ca', borderRadius: '20px' }}>
                                     <ChartCarousel />
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center', border: '1px solid #4028ca', borderRadius: '20px' }}>
+                                    <AiCarousel
+                                        images={[ai_sample2, ai_sample3, ai_sample4, ai_sample5, ai_sample6, ai_sample7]}
+                                    />
                                 </Paper>
                             </Grid>
                         </Grid>
@@ -144,7 +168,7 @@ export default function Search() {
                             </Grid>
                         </Grid>
                     </Container>
-                    
+
                     <Copyright sx={{ pt: 2 }} />
 
                 </Box>
