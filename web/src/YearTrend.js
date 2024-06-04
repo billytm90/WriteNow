@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import books from './images/books.jpg'
+// import books from './images/books.jpg'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -113,7 +113,7 @@ export default function YearTrend() {
                         <Grid container spacing={1}>
                             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Box elevation={5} sx={{ position: 'relative', overflow: 'hidden', width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
-                                    <img src={books} alt='Description' style={{ opacity: 0.3, width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
+                                    <img src={'/images/books.jpg'} alt='Description' style={{ opacity: 0.3, width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
                                     <Typography
                                         variant="h4"
                                         sx={{

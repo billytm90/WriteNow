@@ -90,7 +90,6 @@ const SharedInputComponent = () => {
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 height: '100%',
-                                                border: '1px solid #4028ca',
                                                 borderRadius: '20px'
                                             }}
                                         >

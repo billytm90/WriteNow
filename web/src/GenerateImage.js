@@ -151,7 +151,7 @@ export default function GenerateImage() {
                                             </Select>
                                         </FormControl>
                                     </Box>
-                                    <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Box mt={2} sx={{ display: 'flex' }}>
                                         <Button variant="contained" color="primary" onClick={handleGenerateImage}>
                                             이미지 생성
                                         </Button>

@@ -80,7 +80,7 @@ const RelatedKeyword = ({ query }) => {
   ];
 
   return (
-    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px', border: '1px solid #4028ca', borderRadius: '20px' }}>
+    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px',  borderRadius: '20px' }}>
       <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
         {query ? `${query}의 연관 키워드` : '검색한 키워드의 연관 키워드'}
       </Typography>
@@ -95,7 +95,7 @@ const RelatedKeyword = ({ query }) => {
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
-                    <StyledTableCell2 key={column.id} align="left" style={{ minWidth: column.minWidth }}>
+                    <StyledTableCell2 key={column.id} align={column.align} style={{ top: 57,minWidth: column.minWidth }}>
                       {column.label}
                     </StyledTableCell2>
                   ))}

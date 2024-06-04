@@ -75,7 +75,7 @@ const WholeKeywordTrend = () => {
 
     return (
         <React.Fragment>
-            <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px', border: '1px solid #4028ca', borderRadius: '20px' }}>
+            <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px',  borderRadius: '20px' }}>
 
                 <Typography variant="h6" component="h6" sx={{ pl: 1 }}>
                     TOP 100 트렌드 키워드

@@ -85,7 +85,7 @@ const RelatedBooks = ({ query }) => {
   ];
 
   return (
-    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px', border: '1px solid #4028ca', borderRadius: '20px' }}>
+    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px',  borderRadius: '20px' }}>
       <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
         {query ? `${query}의 연관 도서` : '검색한 키워드의 연관 도서'}
       </Typography>

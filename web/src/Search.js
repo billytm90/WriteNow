@@ -12,17 +12,11 @@ import Link from '@mui/material/Link';
 import { Button } from '@mui/material';
 import TestChart from './Chart';
 import ChartCarousel from './ChartCarousel';
-import books from './images/books.jpg';
+// import books from 'web/public/images/books.jpg';
 import { useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import "./styles.css";
 import AiCarousel from './AiCarousel';
-import ai_sample2 from './images/ai_sample2.jpg';
-import ai_sample3 from './images/ai_sample3.jpg';
-import ai_sample4 from './images/ai_sample4.jpg';
-import ai_sample5 from './images/ai_sample5.jpg';
-import ai_sample6 from './images/ai_sample6.jpg';
-import ai_sample7 from './images/ai_sample7.jpg';
 
 const theme = createTheme({
     typography: {
@@ -97,23 +91,22 @@ export default function Search() {
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
-                                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center', border: '1px solid #4028ca', borderRadius: '20px' }}>
+                                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center', borderRadius: '20px' }}>
                                     <ChartCarousel />
                                 </Paper>
                             </Grid>
                         </Grid>
                     </Container>
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                    {/* <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
                                 <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <AiCarousel
-                                        images={[ai_sample2, ai_sample3, ai_sample4, ai_sample5, ai_sample6, ai_sample7]}
-                                    />
+                                    <AiCarousel/>
                                 </Paper>
                             </Grid>
                         </Grid>
-                    </Container>
+                    </Container> */}
+                    <AiCarousel/>
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={1}>
                             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -131,7 +124,7 @@ export default function Search() {
                                     }}
                                 >
                                     <img
-                                        src={books}
+                                        src={'/images/books.jpg'}
                                         alt='Description'
                                         style={{ opacity: 0.3, width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }}
                                     />
