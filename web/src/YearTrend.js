@@ -125,6 +125,7 @@ export default function YearTrend() {
                                         color: 'black',
                                         padding: '8px',
                                         borderRadius: '4px',
+                                        fontWeight: 'bold'
                                     }}
                                 >
                                     최신 트렌드 책과 키워드
@@ -145,7 +146,7 @@ export default function YearTrend() {
                         </Grid>
                     </Grid>
                 </Container>
-                <Copyright sx={{ pt: 2 }} />
+                <Copyright sx={{ pt: 2 , mb: 4}} />
             </Box>
         </ThemeProvider>
     );

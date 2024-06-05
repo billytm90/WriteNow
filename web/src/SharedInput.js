@@ -59,7 +59,7 @@ const SharedInputComponent = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
-                                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
+                                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1,fontWeight: 'bold' }}>
                                         키워드 검색
                                     </Typography>
                                     <form onSubmit={handleSubmit} style={{ display: 'flex', marginBottom: '20px' }}>
@@ -79,7 +79,7 @@ const SharedInputComponent = () => {
                             </Grid>
                         </Grid>
                     </Container>
-                    <CSSTransition in={!!submittedQuery} timeout={5000} classNames="fade" unmountOnExit>
+                    <CSSTransition in={!!submittedQuery}  unmountOnExit>
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
@@ -103,7 +103,7 @@ const SharedInputComponent = () => {
                             </Grid>
                         </Container>
                     </CSSTransition>
-                    <CSSTransition in={!!submittedQuery} timeout={5000} classNames="fade" unmountOnExit>
+                    <CSSTransition in={!!submittedQuery}  unmountOnExit>
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12} sm={8}>
@@ -115,7 +115,7 @@ const SharedInputComponent = () => {
                             </Grid>
                         </Container>
                     </CSSTransition>
-                    <Copyright sx={{ pt: 2 }} />
+                    <Copyright sx={{ pt: 2 , mb: 4}} />
                 </Box>
             </QueryClientProvider>
         </ThemeProvider>

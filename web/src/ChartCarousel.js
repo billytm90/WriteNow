@@ -48,10 +48,10 @@ const ChartCarousel = () => {
         <Box sx={{ width: '95%', margin: 'auto', position: 'relative' }}>
             {/* Text on top of the slider */}
             <Box sx={{ position: 'absolute', top: 0, left: '50%', transform: 'translate(-50%,80%)', textAlign: 'left' }}>
-                <Typography variant="h4" component="div" style={{ color: 'black', marginBottom: '4px' }}>
+                <Typography variant="h4" component="div" style={{ color: 'black', marginBottom: '4px',fontWeight: 'bold' }}>
                     지금 IT분야의 각종 키워드와
                 </Typography>
-                <Typography variant="h4" component="div" style={{ color: 'black', marginBottom: '4px' }}>
+                <Typography variant="h4" component="div" style={{ color: 'black', marginBottom: '4px',fontWeight: 'bold' }}>
                     책의 트렌드를 확인해보세요.
                 </Typography>
             </Box>

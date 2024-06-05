@@ -9,9 +9,16 @@ import Box from '@mui/material/Box';
 import { TextField, Container, Typography } from '@mui/material';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import useTypingEffect from './useTypingEffect';
 
 const Image = styled.img`
   height: 500px;
+`;
+
+const Frame = styled.div`
+  padding: 10px; /* Adjust the padding as needed */
+  border: 10px solid #1a8cff; /* White border to simulate a frame */
+  background-color: #99ccff; /* Background color for the frame */
 `;
 
 export default function AiCarousel() {
@@ -50,6 +57,8 @@ export default function AiCarousel() {
         "왕관을 쓰고 화려한 장식이 가미된 기사의 투구를 쓰고 있는 회색 러시안 블루 고양이",
         "검은색 기사의 갑옷을 입고 칼을 빼들은 채로 앞으로 내밀고 있는 갈색 토끼",
     ];
+    
+    const typedText = useTypingEffect(texts[currentSlide]);
 
     return (
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -81,6 +90,9 @@ export default function AiCarousel() {
                                     noWrap
                                     component="h4"
                                     align="center"
+                                    sx={{
+                                        fontWeight: 'bold'
+                                    }}
                                 >
                                     원하는 그림의 프롬프트를 입력해보세요.
                                 </Typography>
@@ -92,16 +104,18 @@ export default function AiCarousel() {
                                     <Slider {...settings}>
                                         {images.map((image, index) => (
                                             <div key={index} style={{ display: 'flex', justifyContent: 'center' }}>
-                                                <Image src={image} alt={`Slide ${index + 1}`} style={{ boxShadow: '50px 50px 50px rgba(0, 0, 0, 0.1)', maxWidth: '100%', height: 'auto' }} />
+                                                <Frame>
+                                                    <Image src={image} alt={`Slide ${index + 1}`} style={{ boxShadow: '50px 50px 50px rgba(0, 0, 0, 0.1)', maxWidth: '100%', height: 'auto' }} />
+                                                </Frame>
                                             </div>
                                         ))}
                                     </Slider>
                                 </Box>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center',mt: 20 }}>
+                                <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', mt: 20 }}>
                                     <TextField
-                                        label="프롬프트"
+                                        label="Prompt"
                                         variant="outlined"
                                         multiline
                                         rows={2}

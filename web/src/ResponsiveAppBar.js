@@ -16,6 +16,14 @@ import { Link } from 'react-router-dom';
 
 const pages = ['최신 트렌드', 'AI 표지생성', '키워드 검색'];
 const settings = ['프로필', '계정', '로그아웃'];
+const gradientTextStyle = {
+    background: 'linear-gradient(45deg, #B0E0E6, #3399FF, #00008B)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    fontFamily: '"Kodchasan", sans-serif',
+    fontWeight: 'bold',
+    fontSize: '1.5rem',
+};
 
 export default function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -47,19 +55,9 @@ export default function ResponsiveAppBar() {
                             noWrap
                             component={Link}
                             to="/" // 홈으로
-                            sx={{
-                                mr: 2,
-                                display: { xs: 'none', md: 'flex' },
-                                fontFamily: '"Kodchasan", sans-serif', // Set the specific font here
-                                fontWeight: 700,
-                                letterSpacing: '.3rem',
-                                color: 'black',
-                                textDecoration: 'none',
-                            }}
+                            sx={gradientTextStyle}
                         >
-                            <Box component="span" sx={{ color: '#3399FF' }}>W</Box>
-                            <Box component="span" sx={{ color: 'black' }}>rite Now</Box>
-                            <Box component="span" sx={{ color: '#3399FF' }}>!</Box>
+                            Write Now!
                         </Typography>
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -94,12 +92,12 @@ export default function ResponsiveAppBar() {
                             </Menu>
                         </Box>
                         <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, ml: 32 }}>
                             {pages.map((page) => (
                                 <Button
                                     key={page}
                                     onClick={handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'black', display: 'block', mr: 6 }}
+                                    sx={{ my: 2, color: 'black', display: 'block', mx: 8 }}
                                 >
                                     <Link
                                         to={
@@ -111,20 +109,30 @@ export default function ResponsiveAppBar() {
                                                         ? '/SharedInput'
                                                         : '#'
                                         }
-                                        style={{ textDecoration: 'none', color: 'inherit' }}
+                                        style={{ textDecoration: 'none', color: 'inherit',fontWeight: 'bold' }}
                                     >
                                         {page}
                                     </Link>
                                 </Button>
                             ))}
                         </Box>
-
-                        <Box sx={{ flexGrow: 0 }}>
-                            {/* <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                                </IconButton>
-                            </Tooltip> */}
+                        <Box sx={{ flexGrow: 0, ml: 'auto' }}>
+                            <Button
+                                variant="text" 
+                                component={Link}
+                                to="/signup"
+                                sx={{ color: 'black', mr: 1, backgroundColor:'white' }}
+                            >
+                                Join Us
+                            </Button>
+                            <Button
+                                variant="contained" color="primary"
+                                component={Link}
+                                to="/login"
+                                sx={{ color: 'white' }}
+                            >
+                                Login
+                            </Button>
                             <Menu
                                 sx={{ mt: '45px' }}
                                 id="menu-appbar"

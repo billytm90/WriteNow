@@ -77,7 +77,7 @@ const WholeKeywordTrend = () => {
         <React.Fragment>
             <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px',  borderRadius: '20px' }}>
 
-                <Typography variant="h6" component="h6" sx={{ pl: 1 }}>
+                <Typography variant="h6" component="h6" sx={{ pl: 1,fontWeight: 'bold' }}>
                     TOP 100 트렌드 키워드
                 </Typography>
                 <TableContainer component={Paper}>
@@ -88,7 +88,7 @@ const WholeKeywordTrend = () => {
                                     <StyledTableCell2
                                         key={column.id}
                                         align={column.align}
-                                        style={{ top: 57, minWidth: column.minWidth }}
+                                        style={{ top: 57, minWidth: column.minWidth,fontWeight: 'bold' }}
                                     >
                                         {column.label}
                                     </StyledTableCell2>

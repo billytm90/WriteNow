@@ -24,6 +24,16 @@ const theme = createTheme({
     },
 });
 
+const gradientTextStyle = {
+    background: 'linear-gradient(45deg, #B0E0E6, #3399FF, #00008B)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    fontFamily: '"Kodchasan", sans-serif',
+    fontWeight: 'bold',
+    fontSize: '6rem',
+};
+
+
 function Copyright(props) {
     return (
         <Typography to="/" variant="body2" color="text.secondary" align="center" {...props}>
@@ -57,7 +67,7 @@ export default function Search() {
                 sx={{
                     backgroundColor: 'white',
                     flexGrow: 1,
-                    overflow: 'auto',
+                    overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -66,31 +76,59 @@ export default function Search() {
 
 
 
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                <Container maxWidth="lg" sx={{ mt: 8, mb: 4 }}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center' }}>
-                                <Typography
-                                    variant="h3"
-                                    noWrap
-                                    component="h3"
+                            <Paper elevation={0} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '500px', position: 'relative', background: 'none' }}>
+                                <Box
                                     sx={{
-                                        fontFamily: '"Kodchasan", sans-serif', // Set the specific font here
-                                    }}>
-                                    <Box component="span" sx={{ color: '#3399FF' }}>W</Box>
-                                    <Box component="span" sx={{ color: 'black' }}>rite Now</Box>
-                                    <Box component="span" sx={{ color: '#3399FF' }}>!</Box>
-                                </Typography>
-                                <Typography
-                                    variant="h6"
-                                    noWrap
-                                    component="h6">
-                                    한눈에 쉽고 빠르게 각종 분야의 트렌드를 확인하자!
-                                </Typography>
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        width: '70%',
+                                        height: '100%',
+                                        background: 'radial-gradient(circle at center, #B3E5FC, #E0F7FA 40%, rgba(255, 255, 255, 0) 60%)',
+                                        borderRadius: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        zIndex: 1,
+                                        border: 'none', // 외곽선 제거
+                                    }}
+                                />
+                                <Box
+                                    sx={{
+                                        position: 'relative',
+                                        zIndex: 2,
+                                        textAlign: 'center',
+                                        padding: '20px',
+                                        backgroundColor: 'transparent', // 배경 투명화
+                                        borderRadius: '20px',
+                                    }}
+                                >
+                                    <Typography
+                                        variant="h3"
+                                        noWrap
+                                        component="h3"
+                                        sx={gradientTextStyle}
+                                    >
+                                        Write Now!
+                                    </Typography>
+                                    <Typography
+                                        variant="h6"
+                                        noWrap
+                                        component="h6"
+                                        sx={{
+                                            fontWeight: 'bold',
+                                            color: '#000000',
+                                            fontSize: '2rem'
+                                        }}>
+                                        쉽고 빠르게 다양한 장르의 도서트렌드를 확인해보세요!
+                                    </Typography>
+                                </Box>
                             </Paper>
                         </Grid>
                     </Grid>
                 </Container>
+
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
@@ -146,6 +184,7 @@ export default function Search() {
                                         sx={{
                                             padding: '8px',
                                             borderRadius: '4px',
+                                            fontWeight: 'bold'
                                         }}
                                     >
                                         IT분야의 최신 트렌드를 한눈에!
@@ -165,7 +204,7 @@ export default function Search() {
                     </Grid>
                 </Container>
 
-                <Copyright sx={{ pt: 2 }} />
+                <Copyright sx={{ pt: 2 , mb: 4}} />
 
             </Box>
         </ThemeProvider >

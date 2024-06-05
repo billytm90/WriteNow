@@ -18,8 +18,14 @@ const theme = createTheme({
 const samples = [1, 2, 3];
 
 const sizes = [
+    { label: "480 x 640", width: 480, height: 640 },
     { label: "512 x 512", width: 512, height: 512 },
+    { label: "600 x 800", width: 600, height: 800 },
     { label: "640 x 640", width: 640, height: 640 },
+    { label: "640 x 960", width: 640, height: 960 },
+    { label: "1024 x 1024", width: 1024, height: 1024 },
+    { label: "1024 x 1280", width: 1024, height: 1280 },
+    { label: "1200 x 1600", width: 1200, height: 1600 }
 ];
 
 function Copyright(props) {
@@ -101,7 +107,7 @@ export default function GenerateImage() {
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
                             <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
-                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
+                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1,fontWeight: 'bold' }}>
                                     Prompt 입력
                                 </Typography>
                                 <TextField
@@ -161,8 +167,8 @@ export default function GenerateImage() {
                                     <Box mt={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                         {generatedImages.map((image, index) => (
                                             <React.Fragment>
-                                                <Box key={index} sx={{}}>
-                                                    <img src={image} alt={`Generated ${index}`} />
+                                                <Box key={index} sx={{ maxWidth: '100%', mb: 3 }}>
+                                                    <img src={image} alt={`Generated ${index}`} style={{ maxWidth: '100%', height: 'auto' }} />
                                                 </Box>
                                                 <Box key={index} sx={{ mb: 3 }}>
                                                     <Button
@@ -178,7 +184,7 @@ export default function GenerateImage() {
                         </Grid>
                     </Grid>
                 </Container>
-                <Copyright sx={{ pt: 2 }} />
+                <Copyright sx={{ pt: 2 , mb: 4}} />
             </Box>
         </ThemeProvider>
     );
