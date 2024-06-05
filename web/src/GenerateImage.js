@@ -85,100 +85,100 @@ export default function GenerateImage() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <Box
-                    component="main"
-                    sx={{
-                        backgroundColor: 'white',
-                        flexGrow: 1,
-                        height: '100vh',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={1}>
-                            <Grid item xs={12}>
-                                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', border: '1px solid #4028ca', borderRadius: '20px' }}>
-                                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
-                                        프롬프트 입력
-                                    </Typography>
-                                    <TextField
-                                        placeholder="ex) 언덕 위 나무와 오두막집"
-                                        variant="outlined"
-                                        fullWidth
-                                        value={prompt}
-                                        onChange={(e) => setPrompt(e.target.value)}
-                                        sx={{ mb: 2, backgroundColor: 'white' }}
-                                    />
-                                    <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-                                        <FormControl sx={{ minWidth: 120, backgroundColor: 'white' }}>
-                                            <InputLabel id="demo-simple-select-label">이미지 수</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={numImages}
-                                                label="이미지 수"
-                                                onChange={(e) => setNumImages(Number(e.target.value))}
-                                            >
-                                                {samples.map((numImages) => (
-                                                    <MenuItem
-                                                        key={numImages}
-                                                        value={numImages}
-                                                    >
-                                                        {numImages}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                        <FormControl sx={{ minWidth: 120, backgroundColor: 'white' }}>
-                                            <InputLabel id="size-select-label">Size</InputLabel>
-                                            <Select
-                                                labelId="size-select-label"
-                                                id="size-select"
-                                                value={selectedSize}
-                                                label="Size"
-                                                onChange={(e) => setSelectedSize(e.target.value)}
-                                            >
-                                                {sizes.map((option) => (
-                                                    <MenuItem
-                                                        key={option.label}
-                                                        value={option}
-                                                    >
-                                                        {option.label}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                    <Box mt={2} sx={{ display: 'flex' }}>
-                                        <Button variant="contained" color="primary" onClick={handleGenerateImage}>
-                                            이미지 생성
-                                        </Button>
-                                    </Box>
-                                    {generatedImages.length > 0 && (
-                                        <Box mt={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                            {generatedImages.map((image, index) => (
-                                                <React.Fragment>
-                                                    <Box key={index} sx={{}}>
-                                                        <img src={image} alt={`Generated ${index}`} />
-                                                    </Box>
-                                                    <Box key={index} sx={{ mb: 3 }}>
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            size='small' onClick={() => handleSaveImage(image, index)}>이미지 저장</Button>
-                                                    </Box>
-                                                </React.Fragment>
+            <CssBaseline />
+            <Box
+                component="main"
+                sx={{
+                    backgroundColor: 'white',
+                    flexGrow: 1,
+                    overflow: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
+                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
+                                    Prompt 입력
+                                </Typography>
+                                <TextField
+                                    placeholder="ex) 언덕 위 나무와 오두막집"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={prompt}
+                                    onChange={(e) => setPrompt(e.target.value)}
+                                    sx={{ mb: 2, backgroundColor: 'white' }}
+                                />
+                                <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                                    <FormControl sx={{ minWidth: 120, backgroundColor: 'white' }}>
+                                        <InputLabel id="demo-simple-select-label">이미지 수</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={numImages}
+                                            label="이미지 수"
+                                            onChange={(e) => setNumImages(Number(e.target.value))}
+                                        >
+                                            {samples.map((numImages) => (
+                                                <MenuItem
+                                                    key={numImages}
+                                                    value={numImages}
+                                                >
+                                                    {numImages}
+                                                </MenuItem>
                                             ))}
-                                        </Box>
-                                    )}
-                                </Paper>
-                            </Grid>
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl sx={{ minWidth: 120, backgroundColor: 'white' }}>
+                                        <InputLabel id="size-select-label">Size</InputLabel>
+                                        <Select
+                                            labelId="size-select-label"
+                                            id="size-select"
+                                            value={selectedSize}
+                                            label="Size"
+                                            onChange={(e) => setSelectedSize(e.target.value)}
+                                        >
+                                            {sizes.map((option) => (
+                                                <MenuItem
+                                                    key={option.label}
+                                                    value={option}
+                                                >
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <Box mt={2} sx={{ display: 'flex' }}>
+                                    <Button variant="contained" color="primary" onClick={handleGenerateImage}>
+                                        이미지 생성
+                                    </Button>
+                                </Box>
+                                {generatedImages.length > 0 && (
+                                    <Box mt={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                        {generatedImages.map((image, index) => (
+                                            <React.Fragment>
+                                                <Box key={index} sx={{}}>
+                                                    <img src={image} alt={`Generated ${index}`} />
+                                                </Box>
+                                                <Box key={index} sx={{ mb: 3 }}>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        size='small' onClick={() => handleSaveImage(image, index)}>이미지 저장</Button>
+                                                </Box>
+                                            </React.Fragment>
+                                        ))}
+                                    </Box>
+                                )}
+                            </Paper>
                         </Grid>
-                    </Container>
-                    <Copyright sx={{ pt: 2 }} />
-                </Box>
+                    </Grid>
+                </Container>
+                <Copyright sx={{ pt: 2 }} />
             </Box>
         </ThemeProvider>
     );

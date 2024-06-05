@@ -85,6 +85,9 @@ const ChartCarousel = () => {
                                         fullWidth
                                         onChange={(event) => console.log(event.target.value)}
                                         style={{ marginRight: '10px', backgroundColor: 'white' }}
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
                                     />
                                     <Button onClick={handleButtonClick} variant="contained" color="primary">
                                         검색

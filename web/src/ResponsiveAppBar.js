@@ -38,7 +38,7 @@ export default function ResponsiveAppBar() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="flex" sx={{ backgroundColor: 'white', borderBottom: '2px solid #01579b' }}>
+            <AppBar position="flex" sx={{ backgroundColor: 'white' }}>
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

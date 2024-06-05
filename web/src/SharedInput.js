@@ -43,79 +43,79 @@ const SharedInputComponent = () => {
     return (
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
-                <Box sx={{ display: 'flex' }}>
-                    <CssBaseline />
-                    <Box
-                        component="main"
-                        sx={{
-                            backgroundColor: 'white',
-                            flexGrow: 1,
-                            height: '100vh',
-                            overflow: 'auto',
-                        }}
-                    >
+                <CssBaseline />
+                <Box
+                    component="main"
+                    sx={{
+                        backgroundColor: 'white',
+                        flexGrow: 1,
+                        overflow: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
+                                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
+                                        키워드 검색
+                                    </Typography>
+                                    <form onSubmit={handleSubmit} style={{ display: 'flex', marginBottom: '20px' }}>
+                                        <TextField
+                                            name="query"
+                                            type="text"
+                                            variant="outlined"
+                                            placeholder="키워드 입력"
+                                            fullWidth
+                                            style={{ marginRight: '10px', backgroundColor: 'white' }}
+                                        />
+                                        <Button type="submit" variant="contained" color="primary">
+                                            검색
+                                        </Button>
+                                    </form>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                    <CSSTransition in={!!submittedQuery} timeout={5000} classNames="fade" unmountOnExit>
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
-                                        <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
-                                            키워드 검색
+                                    <Paper
+                                        elevation={5}
+                                        sx={{
+                                            justifyContent: 'center',
+                                            p: 2,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            height: '100%',
+                                            borderRadius: '20px'
+                                        }}
+                                    >
+                                        <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 2 }}>
+                                            {submittedQuery}의 최근 12개월간의 관심도 변화
                                         </Typography>
-                                        <form onSubmit={handleSubmit} style={{ display: 'flex', marginBottom: '20px' }}>
-                                            <TextField
-                                                name="query"
-                                                type="text"
-                                                variant="outlined"
-                                                placeholder="키워드 입력"
-                                                fullWidth
-                                                style={{ marginRight: '10px', backgroundColor: 'white' }}
-                                            />
-                                            <Button type="submit" variant="contained" color="primary">
-                                                검색
-                                            </Button>
-                                        </form>
+                                        <TestChart query={submittedQuery} />
                                     </Paper>
                                 </Grid>
                             </Grid>
                         </Container>
-                        <CSSTransition in={!!submittedQuery} timeout={5000} classNames="fade" unmountOnExit>
-                            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <Paper
-                                            elevation={5}
-                                            sx={{
-                                                justifyContent: 'center',
-                                                p: 2,
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                height: '100%',
-                                                borderRadius: '20px'
-                                            }}
-                                        >
-                                            <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 2 }}>
-                                                {submittedQuery}의 최근 12개월간의 관심도 변화
-                                            </Typography>
-                                            <TestChart query={submittedQuery} />
-                                        </Paper>
-                                    </Grid>
+                    </CSSTransition>
+                    <CSSTransition in={!!submittedQuery} timeout={5000} classNames="fade" unmountOnExit>
+                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} sm={8}>
+                                    <RelatedBooks query={query} />
                                 </Grid>
-                            </Container>
-                        </CSSTransition>
-                        <CSSTransition in={!!submittedQuery} timeout={5000} classNames="fade" unmountOnExit>
-                            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12} sm={8}>
-                                        <RelatedBooks query={query} />
-                                    </Grid>
-                                    <Grid item xs={12} sm={4}>
-                                        <RelatedKeyword query={query} />
-                                    </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <RelatedKeyword query={query} />
                                 </Grid>
-                            </Container>
-                        </CSSTransition>
-                        <Copyright sx={{ pt: 2 }} />
-                    </Box>
+                            </Grid>
+                        </Container>
+                    </CSSTransition>
+                    <Copyright sx={{ pt: 2 }} />
                 </Box>
             </QueryClientProvider>
         </ThemeProvider>
