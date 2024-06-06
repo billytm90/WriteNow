@@ -59,7 +59,7 @@ const SharedInputComponent = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
-                                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1,fontWeight: 'bold' }}>
+                                    <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1,fontWeight: 'bold',color:'#386495' }}>
                                         키워드 검색
                                     </Typography>
                                     <form onSubmit={handleSubmit} style={{ display: 'flex', marginBottom: '20px' }}>

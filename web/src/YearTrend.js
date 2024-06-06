@@ -122,7 +122,7 @@ export default function YearTrend() {
                                         top: '50%',
                                         left: '50%',
                                         transform: 'translate(-50%, -50%)',
-                                        color: 'black',
+                                        color: '#545454',
                                         padding: '8px',
                                         borderRadius: '4px',
                                         fontWeight: 'bold'

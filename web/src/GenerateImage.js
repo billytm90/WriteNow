@@ -112,7 +112,7 @@ export default function GenerateImage() {
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
                             <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
-                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1, fontWeight: 'bold' }}>
+                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1, fontWeight: 'bold', color: '#386495' }}>
                                     Prompt 입력
                                 </Typography>
                                 <TextField
@@ -164,11 +164,10 @@ export default function GenerateImage() {
                                     </FormControl>
                                 </Box>
                                 <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Button variant="contained" color="primary" onClick={handleGenerateImage}>
+                                    <Button variant="contained" color="primary" onClick={handleGenerateImage} disabled={loading}>
                                         {loading ? "생성 중..." : "이미지 생성"}
                                     </Button>
-                                    <Typography variant="h10" component="h10" gutterBottom sx={{mt:1,fontWeight: 'bold',textDecoration: 'underline' }}>
-                                        페이지를 벗어나면 이미지는 저장되지 않고 삭제되므로 주의바랍니다.
+                                    <Typography variant="h10" component="h10" gutterBottom sx={{ mt: 1, fontSize: '0.8rem', color: '#386495', textDecoration: 'underline' }}>                                        페이지를 벗어나면 이미지는 저장되지 않고 삭제되므로 주의바랍니다.
                                     </Typography>
                                 </Box>
                                 {generatedImages.length > 0 && (
