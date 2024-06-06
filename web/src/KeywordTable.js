@@ -61,9 +61,14 @@ const RelatedKeyword = ({ query }) => {
 
   const sortedData = useMemo(() => {
     if (!data) return [];
-    // Sort the data array in descending order of the score
-    return [...data].sort((a, b) => b.score - a.score);
+    // Filter out the data where the "keyword" string length is 1
+    const filteredData = data.filter(item => item.keyword.length !== 1);
+    // Sort the filtered data array in descending order of the score
+    const sortedFilteredData = filteredData.sort((a, b) => b.score - a.score);
+    // Slice the sorted and filtered data so that only 10 items remain
+    return sortedFilteredData.slice(0, 10);
   }, [data]);
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -80,7 +85,7 @@ const RelatedKeyword = ({ query }) => {
   ];
 
   return (
-    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px',  borderRadius: '20px' }}>
+    <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', borderRadius: '20px', borderRadius: '20px' }}>
       <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1 }}>
         {query ? `${query}의 연관 키워드` : '검색한 키워드의 연관 키워드'}
       </Typography>
@@ -95,7 +100,7 @@ const RelatedKeyword = ({ query }) => {
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
-                    <StyledTableCell2 key={column.id} align={column.align} style={{ top: 57,minWidth: column.minWidth }}>
+                    <StyledTableCell2 key={column.id} align={column.align} style={{ top: 57, minWidth: column.minWidth }}>
                       {column.label}
                     </StyledTableCell2>
                   ))}

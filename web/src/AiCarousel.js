@@ -61,7 +61,7 @@ export default function AiCarousel() {
     const typedText = useTypingEffect(texts[currentSlide]);
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
             <Grid container spacing={1}>
                 <Grid item xs={12}>
                     <Paper
@@ -71,7 +71,8 @@ export default function AiCarousel() {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            borderRadius: '20px',
+                            borderRadius: '20px'
+                            , backgroundColor: 'rgba(255, 255, 255, 0)'
                         }}
                     >
                         <Grid container spacing={1}>

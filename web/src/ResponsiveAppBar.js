@@ -109,7 +109,7 @@ export default function ResponsiveAppBar() {
                                                         ? '/SharedInput'
                                                         : '#'
                                         }
-                                        style={{ textDecoration: 'none', color: 'inherit',fontWeight: 'bold' }}
+                                        style={{ textDecoration: 'none', color: 'inherit' }}
                                     >
                                         {page}
                                     </Link>

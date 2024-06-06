@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import "./styles.css";
 import AiCarousel from './AiCarousel';
+import MainPageBookTable from './MainPageBookTable';
 
 const theme = createTheme({
     typography: {
@@ -71,6 +72,7 @@ export default function Search() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    background: 'repeating-linear-gradient( #FFFFFF, #FFFFFF,  #D8F2FF 37%, #FFFFFF 52%)'
                 }}
             >
 
@@ -129,10 +131,13 @@ export default function Search() {
                     </Grid>
                 </Container>
 
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4, }}>
+                <Container maxWidth="lg" sx={{ mt: 32, mb: 25, backgroundColor: 'rgba(255, 255, 255, 0)' }}>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center', borderRadius: '20px' }}>
+                            <Paper elevation={0} sx={{
+                                backgroundColor: 'rgba(255, 255, 255, 0)',
+                                p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '500px', justifyContent: 'center', borderRadius: '20px',
+                            }}>
                                 <ChartCarousel />
                             </Paper>
                         </Grid>
@@ -148,63 +153,39 @@ export default function Search() {
                         </Grid>
                     </Container> */}
                 <AiCarousel />
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Container maxWidth="lg" sx={{ mt: 20, mb: 8 }}>
                     <Grid container spacing={1}>
-                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <Box
-                                elevation={0}
-                                sx={{
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                    width: '100%',
-                                    height: 'auto',
-                                    maxWidth: '100%',
-                                    maxHeight: '100%',
-                                    backgroundColor: '#EEF3FF',
-                                    borderRadius: '20px',
-                                }}
-                            >
-                                <img
-                                    src={'/images/books.jpg'}
-                                    alt='Description'
-                                    style={{ opacity: 0.3, width: '100%', height: 'auto', maxWidth: '100%', maxHeight: '100%' }}
-                                />
-                                <Box
+                        <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',justifyContent: 'center'}}>
+                                <Typography
+                                    variant="h4"
                                     sx={{
-                                        position: 'absolute',
-                                        top: '50%',
-                                        left: '50%',
-                                        transform: 'translate(-50%, -50%)',
-                                        textAlign: 'center',
-                                        color: 'black',
+                                        padding: '8px',
+                                        borderRadius: '4px',
+                                        fontWeight: 'bold'
                                     }}
                                 >
-                                    <Typography
-                                        variant="h4"
-                                        sx={{
-                                            padding: '8px',
-                                            borderRadius: '4px',
-                                            fontWeight: 'bold'
-                                        }}
-                                    >
-                                        IT분야의 최신 트렌드를 한눈에!
-                                    </Typography>
-                                    <Button
-                                        onClick={handleButtonClick}
-                                        variant="contained"
-                                        color="primary"
-                                        size='large'
-                                        sx={{ mt: 2 }}
-                                    >
-                                        지금 확인하기
-                                    </Button>
-                                </Box>
+                                    IT분야의 최신 트렌드를 한눈에!
+                                </Typography>
+                                <Button
+                                    onClick={handleButtonClick}
+                                    variant="contained"
+                                    color="primary"
+                                    size='large'
+                                    sx={{ mt: 2 }}
+                                >
+                                    지금 확인하기
+                                </Button>
                             </Box>
+                        </Grid>
+                        <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+                            {/* Right side content */}
+                            <MainPageBookTable />
                         </Grid>
                     </Grid>
                 </Container>
 
-                <Copyright sx={{ pt: 2 , mb: 4}} />
+                <Copyright sx={{ pt: 2, mb: 4 }} />
 
             </Box>
         </ThemeProvider >

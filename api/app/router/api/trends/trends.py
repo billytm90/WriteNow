@@ -39,7 +39,7 @@ def get_related_keywords(query: str = Query(None)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
     try:
-        keywords = [keyword for keyword, _ in bt_model.wv.most_similar(query, topn=10)]
+        keywords = [keyword for keyword, _ in bt_model.wv.most_similar(query, topn=20)]
         return [{"keyword": keyword, "score": __get_score(keyword)} for keyword in keywords]
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

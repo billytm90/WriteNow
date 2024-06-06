@@ -14,6 +14,13 @@ const queryClient = new QueryClient();
 
 const queries = ["Python", "Java", "SQL", "DB", "React"];
 
+const CustomPrevArrow = (props) => {
+    return <></>; // Empty component to hide the previous arrow
+};
+const CustomNextArrow = (props) => {
+    return <></>; // Empty component to hide the next arrow
+};
+
 const ChartCarousel = () => {
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
@@ -29,14 +36,16 @@ const ChartCarousel = () => {
     };
 
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 2000,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 6000,
-        pauseOnHover: true,
+        pauseOnHover: false,
+        prevArrow: <CustomPrevArrow />, // Custom previous arrow component
+        nextArrow: <CustomNextArrow />, // Custom next arrow component
         appendDots: dots => (
             <div>
                 <ul style={{ margin: "0px" }}> {dots} </ul>

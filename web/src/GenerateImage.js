@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
-import { Box, Button, Container, FormControl, TextField, Typography, Divider, InputLabel, MenuItem, Select } from '@mui/material';
-import axios from 'axios';
+import { Box, Button, Container, FormControl, TextField, Typography, Divider, InputLabel, MenuItem, Select, CircularProgress } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import { useUnsavedChanges } from './UnsavedChangesContext';
 
 const theme = createTheme({
     typography: {
@@ -18,8 +19,8 @@ const theme = createTheme({
 const samples = [1, 2, 3];
 
 const sizes = [
-    { label: "480 x 640", width: 480, height: 640 },
     { label: "512 x 512", width: 512, height: 512 },
+    { label: "480 x 640", width: 480, height: 640 },
     { label: "600 x 800", width: 600, height: 800 },
     { label: "640 x 640", width: 640, height: 640 },
     { label: "640 x 960", width: 640, height: 960 },
@@ -48,8 +49,10 @@ export default function GenerateImage() {
     // const [height, setHeight] = useState(512);
     const [selectedSize, setSelectedSize] = useState(sizes[0]); // Initialize with the first size option
     const [generatedImages, setGeneratedImages] = useState([]);
+    const [loading, setLoading] = useState(false); // Added loading state
 
     const handleGenerateImage = async () => {
+        setLoading(true); // Set loading to true when starting image generation
         try {
             const response = await fetch('http://127.0.0.1:8000/api/cover/generate_image/', {
                 method: 'POST',
@@ -77,6 +80,8 @@ export default function GenerateImage() {
             setGeneratedImages([...generatedImages, ...imageUrls]);
         } catch (error) {
             console.error('Error generating image:', error);
+        } finally {
+            setLoading(false); // Set loading to false when image generation completes or fails
         }
     };
 
@@ -107,7 +112,7 @@ export default function GenerateImage() {
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
                             <Paper elevation={5} sx={{ p: 2, display: 'flex', flexDirection: 'column', backgroundColor: '#EEF3FF', borderRadius: '20px' }}>
-                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1,fontWeight: 'bold' }}>
+                                <Typography variant="h5" component="h5" gutterBottom sx={{ pl: 1, fontWeight: 'bold' }}>
                                     Prompt 입력
                                 </Typography>
                                 <TextField
@@ -158,10 +163,13 @@ export default function GenerateImage() {
                                         </Select>
                                     </FormControl>
                                 </Box>
-                                <Box mt={2} sx={{ display: 'flex' }}>
+                                <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Button variant="contained" color="primary" onClick={handleGenerateImage}>
-                                        이미지 생성
+                                        {loading ? "생성 중..." : "이미지 생성"}
                                     </Button>
+                                    <Typography variant="h10" component="h10" gutterBottom sx={{mt:1,fontWeight: 'bold',textDecoration: 'underline' }}>
+                                        페이지를 벗어나면 이미지는 저장되지 않고 삭제되므로 주의바랍니다.
+                                    </Typography>
                                 </Box>
                                 {generatedImages.length > 0 && (
                                     <Box mt={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -184,7 +192,7 @@ export default function GenerateImage() {
                         </Grid>
                     </Grid>
                 </Container>
-                <Copyright sx={{ pt: 2 , mb: 4}} />
+                <Copyright sx={{ pt: 2, mb: 4 }} />
             </Box>
         </ThemeProvider>
     );
