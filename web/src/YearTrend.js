@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -53,6 +54,13 @@ function YearSelect({ onChange }) {
         setYear(selectedYear);
         onChange(selectedYear);
     };
+
+    useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo(0, 0);
+    }, []);
+
+    
     return (
         <Box sx={{ minWidth: 120 }}>
             {/* 연도 선택 */}
@@ -87,7 +95,13 @@ export default function YearTrend() {
         setSelectedYear(year);
     };
 
+    useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
+        
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box
